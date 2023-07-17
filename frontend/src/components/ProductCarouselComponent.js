@@ -4,8 +4,11 @@ import { LinkContainer } from "react-router-bootstrap";
 const ProductCarouselComponent = ({ bestSellers }) => {
   const cursorP = {
     cursor: "pointer",
+    color: "rgba(0,0,0,0.7)",
   };
-
+  const getLowSize = (s) => {
+    return s.substring(0, 200) + "...";
+  };
   return bestSellers.length > 0 ? (
     <Carousel>
       {bestSellers.map((item, idx) => (
@@ -21,7 +24,7 @@ const ProductCarouselComponent = ({ bestSellers }) => {
             <LinkContainer style={cursorP} to={`/product-details/${item._id}`}>
               <h3>Bestseller in {item.category} Category</h3>
             </LinkContainer>
-            <p>{item.description}</p>
+            <p style={cursorP}>{getLowSize(item.description)}</p>
           </Carousel.Caption>
         </Carousel.Item>
       ))}

@@ -1,0 +1,55 @@
+@import "./rootConstants.css";
+
+.custom-navbar {
+  background-color: var(--primary-color);
+}
+
+.btn-primary {
+  color: #000000;
+  background-color: var(--button-bg-color);
+  border-color: var(--button-bd-color);
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:visited {
+  background-color: var(--button-bg-color-hover);
+  color: #000000;
+  border-color: var(--button-bd-color-hover);
+}
+
+.btn-primary:active:focus {
+  box-shadow: 0 0 0 0.15rem var(--button-bg-color-hover);
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: rgba(255, 255, 255);
+}
+
+.navbar-dark .navbar-nav .nav-link :hover {
+  color: rgba(255, 255, 255);
+}
+
+.btn-warning:focus,
+.btn-warning:active,
+.btn-warning {
+  color: #000;
+  background-color: var(--button-bg-color);
+  border-color: var(--button-bd-color);
+}
+
+.btn-warning:hover,
+.btn-warning:visited {
+  background-color: var(--button-bg-color-hover);
+  border-color: var(--button-bd-color-hover);
+}
+.btn-warning:active:focus {
+  box-shadow: 0 0 0 0.15rem var(--button-bg-color-hover);
+}
+.navbar-hidden {
+  position: static;
+}
+
+.navbar-visible {
+  /* position: fixed; */
+}

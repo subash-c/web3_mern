@@ -1,14 +1,17 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
- const MetaComponent = ({ title = "Best online shop", description="Example description" }) => {
-    return (
-       <HelmetProvider>
-           <Helmet>
-              <title>{title}</title> 
-              <meta name="description" content={description} />
-           </Helmet>
-       </HelmetProvider> 
-    )
- }
+const MetaComponent = ({
+  title = "C.S 🛍",
+  description = "Best Online Shop in India and Top in all over the world",
+}) => {
+  return (
+    <HelmetProvider>
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+      </Helmet>
+    </HelmetProvider>
+  );
+};
 
- export default MetaComponent
+export default MetaComponent;

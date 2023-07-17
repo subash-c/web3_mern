@@ -7,9 +7,7 @@ import RatingFilterComponent from "../../components/filterQueryResultOptions/Rat
 import CategoryFilterComponent from "../../components/filterQueryResultOptions/CategoryFilterComponent";
 import AttributesFilterComponent from "../../components/filterQueryResultOptions/AttributesFilterComponent";
 
-
 const ProductListPageComponent = () => {
-
   return (
     <Container fluid>
       <Row>

@@ -128,8 +128,9 @@ const getBestsellers = async (req, res, next) => {
       { $replaceWith: "$doc_with_max_sales" },
       { $match: { sales: { $gt: 0 } } },
       { $project: { _id: 1, name: 1, images: 1, category: 1, description: 1 } },
-      { $limit: 3 },
+      { $limit: 5 },
     ]);
+    // console.log(products);
     res.json(products);
   } catch (err) {
     next(err);
@@ -211,16 +212,16 @@ const adminUpdateProduct = async (req, res, next) => {
 };
 
 const adminUpload = async (req, res, next) => {
-    if (req.query.cloudinary === "true") {
-        try {
-            let product = await Product.findById(req.query.productId).orFail();
-            product.images.push({ path: req.body.url });
-            await product.save();
-        } catch (err) {
-            next(err);
-        }
-       return 
+  if (req.query.cloudinary === "true") {
+    try {
+      let product = await Product.findById(req.query.productId).orFail();
+      product.images.push({ path: req.body.url });
+      await product.save();
+    } catch (err) {
+      next(err);
     }
+    return;
+  }
   try {
     if (!req.files || !!req.files.images === false) {
       return res.status(400).send("No files were uploaded.");
@@ -268,16 +269,19 @@ const adminUpload = async (req, res, next) => {
 };
 
 const adminDeleteProductImage = async (req, res, next) => {
-    const imagePath = decodeURIComponent(req.params.imagePath);
-    if (req.query.cloudinary === "true") {
-        try {
-           await Product.findOneAndUpdate({ _id: req.params.productId }, { $pull: { images: { path: imagePath } } }).orFail(); 
-            return res.end();
-        } catch(er) {
-            next(er);
-        }
-        return
+  const imagePath = decodeURIComponent(req.params.imagePath);
+  if (req.query.cloudinary === "true") {
+    try {
+      await Product.findOneAndUpdate(
+        { _id: req.params.productId },
+        { $pull: { images: { path: imagePath } } }
+      ).orFail();
+      return res.end();
+    } catch (er) {
+      next(er);
     }
+    return;
+  }
   try {
     const path = require("path");
     const finalPath = path.resolve("../frontend/public") + imagePath;
