@@ -26,6 +26,7 @@ import {
 } from "../redux/actions/chatActions";
 
 import "../css/headerComponent.css";
+import { useWeb3 } from "../providers";
 
 const HeaderComponent = () => {
   const dispatch = useDispatch();
@@ -38,6 +39,12 @@ const HeaderComponent = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
+
+  const truncateAddress = (address) => {
+    return `${address.substring(0, 5)}...${address.substring(
+      address.length - 4
+    )}`;
+  };
 
   useEffect(() => {
     dispatch(getCategories());
@@ -110,6 +117,12 @@ const HeaderComponent = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  //added
+  const { connect, isLoading, isWeb3Loaded, useAccount, web3, provider } =
+    useWeb3();
+  const { account } = useAccount(web3, provider);
+  // console.log(web3);
 
   return (
     <Navbar
@@ -205,6 +218,21 @@ const HeaderComponent = () => {
                 <span className="ms-1">CART</span>
               </Nav.Link>
             </LinkContainer>
+            {/* <Button variant="primary"> */}
+            <LinkContainer to="/accountw3">
+              <Nav.Link disabled={isLoading ? true : false}>
+                <span onClick={connect} className="ms-1">
+                  {isLoading
+                    ? "Loading..."
+                    : isWeb3Loaded
+                    ? account
+                      ? truncateAddress(account)
+                      : "Connect"
+                    : "Please install metamask 🦊"}
+                </span>
+              </Nav.Link>
+            </LinkContainer>
+            {/* </Button> */}
           </Nav>
         </Navbar.Collapse>
       </Container>

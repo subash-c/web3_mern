@@ -16,6 +16,7 @@ const ProductForListComponent = ({
   const getLowSize = (s) => {
     return s.substring(0, 200) + "...";
   };
+  console.log(images);
   return (
     <Card style={{ marginTop: "30px", marginBottom: "50px" }}>
       <Row>
@@ -34,13 +35,19 @@ const ProductForListComponent = ({
             charset="utf-8"
           ></script>
           <Card.Img
+            style={{ maxWidth: "100%", maxHeight: "200px", objectFit: "cover" }}
             crossOrigin="anonymous"
             variant="top"
+            // src={
+            //   // "https://drive.google.com/drive/folders/1ps1ighAqZFBCGJCM79e3bitT35NNQ7o3"
+            //   // "https://firebasestorage.googleapis.com/v0/b/mern-ecom-fdc77.appspot.com/o/1-1-540828-noble-faith-l-original-imae8zbajetnasvt.jpeg?alt=media&token=b429b2ce-3ec9-4090-aab4-164ceb21350f"
+            //   // "http://img6a.flixcart.com/image/shoe/s/g/m/black-r998-22-ladela-38-original-imaeh3w9sc3nhuwa.jpeg"
+            //   "https://raw.githubusercontent.com/subash-c/productImages/main/0000000000000-deziworkz-1100x1100-imaedz2krgqc4pxx.jpeg"
+            // }
             src={
-              // "https://drive.google.com/drive/folders/1ps1ighAqZFBCGJCM79e3bitT35NNQ7o3"
-              // "https://firebasestorage.googleapis.com/v0/b/mern-ecom-fdc77.appspot.com/o/1-1-540828-noble-faith-l-original-imae8zbajetnasvt.jpeg?alt=media&token=b429b2ce-3ec9-4090-aab4-164ceb21350f"
-              // "http://img6a.flixcart.com/image/shoe/s/g/m/black-r998-22-ladela-38-original-imaeh3w9sc3nhuwa.jpeg"
-              "https://raw.githubusercontent.com/subash-c/productImages/main/0000000000000-deziworkz-1100x1100-imaedz2krgqc4pxx.jpeg"
+              images
+                ? images[0].path
+                : "https://raw.githubusercontent.com/subash-c/productImages/main/0000000000000-deziworkz-1100x1100-imaedz2krgqc4pxx.jpeg"
             }
           />
           {/* {console.log(images)} */}
@@ -54,7 +61,7 @@ const ProductForListComponent = ({
               {reviewsNumber})
             </Card.Text>
             <Card.Text className="h4">
-              ₹{price}{" "}
+              {(price / 9999999).toFixed(4)} ETH{" "}
               <LinkContainer to={`/product-details/${productId}`}>
                 <Button variant="danger">See product</Button>
               </LinkContainer>

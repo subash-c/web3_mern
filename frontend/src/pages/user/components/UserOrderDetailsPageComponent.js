@@ -28,7 +28,6 @@ const UserOrderDetailsPageComponent = ({
 
   const paypalContainer = useRef();
 
-
   const { id } = useParams();
 
   useEffect(() => {
@@ -78,7 +77,7 @@ const UserOrderDetailsPageComponent = ({
         "To pay for your order click one of the buttons below"
       );
       if (!isPaid) {
-        loadPayPalScript(cartSubtotal, cartItems, id, updateStateAfterOrder)
+        loadPayPalScript(cartSubtotal, cartItems, id, updateStateAfterOrder);
       }
     } else {
       setOrderButtonMessage("Your order was placed. Thank you");
@@ -86,11 +85,11 @@ const UserOrderDetailsPageComponent = ({
   };
 
   const updateStateAfterOrder = (paidAt) => {
-      setOrderButtonMessage("Thank you for your payment!");
-      setIsPaid(paidAt);
-      setButtonDisabled(true);
-      paypalContainer.current.style = "display: none";
-  }
+    setOrderButtonMessage("Thank you for your payment!");
+    setIsPaid(paidAt);
+    setButtonDisabled(true);
+    paypalContainer.current.style = "display: none";
+  };
 
   return (
     <Container fluid>
@@ -150,7 +149,9 @@ const UserOrderDetailsPageComponent = ({
             </ListGroup.Item>
             <ListGroup.Item>
               Items price (after tax):{" "}
-              <span className="fw-bold">${cartSubtotal}</span>
+              <span className="fw-bold">
+                {(cartSubtotal / 9999999).toFixed(4)} ETH
+              </span>
             </ListGroup.Item>
             <ListGroup.Item>
               Shipping: <span className="fw-bold">included</span>
@@ -159,7 +160,10 @@ const UserOrderDetailsPageComponent = ({
               Tax: <span className="fw-bold">included</span>
             </ListGroup.Item>
             <ListGroup.Item className="text-danger">
-              Total price: <span className="fw-bold">${cartSubtotal}</span>
+              Total price:{" "}
+              <span className="fw-bold">
+                {(cartSubtotal / 9999999).toFixed(4)} ETH
+              </span>
             </ListGroup.Item>
             <ListGroup.Item>
               <div className="d-grid gap-2">

@@ -4,7 +4,8 @@ const PriceFilterComponent = ({ price, setPrice }) => {
   return (
     <>
       <Form.Label>
-        <span className="fw-bold">Price no greater than:</span> ₹{price}
+        <span className="fw-bold">Price no greater than:</span>{" "}
+        {(price / 9999999).toFixed(4)} ETH
       </Form.Label>
       <Form.Range
         min={10}

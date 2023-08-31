@@ -10,73 +10,123 @@ import {
 import CartItemComponent from "../../../components/CartItemComponent";
 
 import { useEffect, useState } from "react";
-
+import { useWeb3 } from "../../../providers";
 import { useNavigate } from "react-router-dom";
 
-const UserCartDetailsPageComponent = ({cartItems, itemsCount, cartSubtotal, userInfo,addToCart, removeFromCart, reduxDispatch , getUser, createOrder}) => {
+const UserCartDetailsPageComponent = ({
+  cartItems,
+  itemsCount,
+  cartSubtotal,
+  userInfo,
+  addToCart,
+  removeFromCart,
+  reduxDispatch,
+  getUser,
+  createOrder,
+}) => {
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [userAddress, setUserAddress] = useState(false);
+  const [missingAddress, setMissingAddress] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("pp");
+  const [status, setStatus] = useState([]);
+  const [change, setChange] = useState(false);
+  const { connect, isLoading, isWeb3Loaded, useAccount, web3, provider } =
+    useWeb3();
+  const { account, network, targetNetwork, isSupported } = useAccount(
+    web3,
+    provider
+  );
 
-    const [buttonDisabled, setButtonDisabled] = useState(false);
-    const [userAddress, setUserAddress] = useState(false);
-    const [missingAddress, setMissingAddress] = useState("");
-    const [paymentMethod, setPaymentMethod] = useState("pp");
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const changeCount = (productID, count) => {
+    reduxDispatch(addToCart(productID, count));
+  };
 
-    const changeCount = (productID, count) => {
-        reduxDispatch(addToCart(productID, count));
+  const removeFromCartHandler = (productID, quantity, price) => {
+    if (window.confirm("Are you sure?")) {
+      reduxDispatch(removeFromCart(productID, quantity, price));
     }
+  };
 
-    const removeFromCartHandler = (productID, quantity, price) => {
-        if (window.confirm("Are you sure?")) {
-            reduxDispatch(removeFromCart(productID, quantity, price));
+  useEffect(() => {
+    getUser()
+      .then((data) => {
+        if (
+          !data.address ||
+          !data.city ||
+          !data.country ||
+          !data.zipCode ||
+          !data.state ||
+          !data.phoneNumber
+        ) {
+          setButtonDisabled(true);
+          setMissingAddress(
+            " .In order to make order, fill out your profile with correct address, city etc."
+          );
+        } else {
+          setUserAddress({
+            address: data.address,
+            city: data.city,
+            country: data.country,
+            zipCode: data.zipCode,
+            state: data.state,
+            phoneNumber: data.phoneNumber,
+          });
+          setMissingAddress(false);
         }
-    }
+      })
+      .catch((er) =>
+        console.log(
+          er.response.data.message ? er.response.data.message : er.response.data
+        )
+      );
+  }, [userInfo._id]);
 
-    useEffect(() => {
-        getUser()
-        .then((data) => {
-            if (!data.address || !data.city || !data.country || !data.zipCode || !data.state || !data.phoneNumber) {
-                setButtonDisabled(true);
-                setMissingAddress(" .In order to make order, fill out your profile with correct address, city etc.");
-            } else {
-                setUserAddress({address: data.address, city: data.city, country: data.country, zipCode: data.zipCode, state: data.state, phoneNumber: data.phoneNumber})
-                setMissingAddress(false);
-            }
-        })
-        .catch((er) => console.log(er.response.data.message ? er.response.data.message : er.response.data));
-    }, [userInfo._id])
-
-    const orderHandler = () => {
-        const orderData = {
-            orderTotal: {
-               itemsCount: itemsCount, 
-               cartSubtotal: cartSubtotal,
-            },
-            cartItems: cartItems.map(item => {
-                return {
-                    productID: item.productID,
-                    name: item.name,
-                    price: item.price,
-                    image: { path: item.image ? (item.image.path ?? null) : null },
-                    quantity: item.quantity,
-                    count: item.count,
-
-                }
-            }),
-            paymentMethod: paymentMethod,
+  const orderHandler = () => {
+    const orderData = {
+      orderTotal: {
+        itemsCount: itemsCount,
+        cartSubtotal: cartSubtotal,
+      },
+      cartItems: cartItems.map((item) => {
+        return {
+          productID: item.productID,
+          name: item.name,
+          price: item.price,
+          image: { path: item.image ? item.image.path ?? null : null },
+          quantity: item.quantity,
+          count: item.count,
+        };
+      }),
+      paymentMethod: paymentMethod,
+    };
+    createOrder(orderData)
+      .then((data) => {
+        console.log("data=", data);
+        if (data) {
+          // navigate("/user/order-details/" + data._id);
+          let changeStatus = status;
+          data.map((item, idx) => {
+            changeStatus[idx] = { status: item.status, start: false };
+          });
+          setStatus(changeStatus);
+          setChange(!change);
+          console.log("ST=", status);
         }
-       createOrder(orderData)
-       .then(data => {
-           if (data) {
-               navigate("/user/order-details/" + data._id);
-           }
-       })
-       .catch((err) => console.log(err));
-    }
+      })
+      .catch((err) => console.log("error", err));
+  };
 
-    const choosePayment = (e) => {
-        setPaymentMethod(e.target.value);
-    }
+  const choosePayment = (e) => {
+    setPaymentMethod(e.target.value);
+  };
+
+  useEffect(
+    () => setStatus(cartItems.map((item) => ({ status: false, start: true }))),
+    []
+  );
+  // console.log(status);
 
   return (
     <Container fluid>
@@ -88,16 +138,31 @@ const UserCartDetailsPageComponent = ({cartItems, itemsCount, cartSubtotal, user
             <Col md={6}>
               <h2>Shipping</h2>
               <b>Name</b>: {userInfo.name} {userInfo.lastName} <br />
-              <b>Address</b>: {userAddress.address} {userAddress.city} {userAddress.state} {userAddress.zipCode} <br />
-              <b>Phone</b>: {userAddress.phoneNumber}
+              {userAddress.address ? (
+                <>
+                  <b>Address</b>
+                  <>
+                    : {userAddress.address} {userAddress.city}{" "}
+                    {userAddress.state} {userAddress.zipCode} <br />
+                  </>
+                </>
+              ) : null}
+              {userAddress.phoneNumber ? (
+                <>
+                  <b>Phone</b>: {userAddress.phoneNumber}
+                </>
+              ) : null}
+              <b>Sender</b>: {account} <br />
+              {/* <b>Receiver</b>: {userInfo.name} {userInfo.lastName} <br /> */}
             </Col>
             <Col md={6}>
               <h2>Payment method</h2>
               <Form.Select onChange={choosePayment}>
-                <option value="pp">PayPal</option>
+                <option>Pay using ether</option>
+                {/* <option value="pp">PayPal</option>
                 <option value="cod">
                   Cash On Delivery (delivery may be delayed)
-                </option>
+                </option> */}
               </Form.Select>
             </Col>
             <Row>
@@ -118,7 +183,13 @@ const UserCartDetailsPageComponent = ({cartItems, itemsCount, cartSubtotal, user
           <h2>Order items</h2>
           <ListGroup variant="flush">
             {cartItems.map((item, idx) => (
-              <CartItemComponent item={item} key={idx} removeFromCartHandler={removeFromCartHandler} changeCount={changeCount} />
+              <CartItemComponent
+                item={item}
+                key={idx}
+                removeFromCartHandler={removeFromCartHandler}
+                changeCount={changeCount}
+                status={status[idx]}
+              />
             ))}
           </ListGroup>
         </Col>
@@ -128,7 +199,10 @@ const UserCartDetailsPageComponent = ({cartItems, itemsCount, cartSubtotal, user
               <h3>Order summary</h3>
             </ListGroup.Item>
             <ListGroup.Item>
-              Items price (after tax): <span className="fw-bold">${cartSubtotal}</span>
+              Items price (after tax):{" "}
+              <span className="fw-bold">
+                {(cartSubtotal / 9999999).toFixed(4)} ETH
+              </span>
             </ListGroup.Item>
             <ListGroup.Item>
               Shipping: <span className="fw-bold">included</span>
@@ -137,11 +211,20 @@ const UserCartDetailsPageComponent = ({cartItems, itemsCount, cartSubtotal, user
               Tax: <span className="fw-bold">included</span>
             </ListGroup.Item>
             <ListGroup.Item className="text-danger">
-              Total price: <span className="fw-bold">${cartSubtotal}</span>
+              Total price:{" "}
+              <span className="fw-bold">
+                {(cartSubtotal / 9999999).toFixed(4)} ETH
+              </span>
             </ListGroup.Item>
             <ListGroup.Item>
               <div className="d-grid gap-2">
-                <Button size="lg" onClick={orderHandler} variant="danger" type="button" disabled={buttonDisabled}>
+                <Button
+                  size="lg"
+                  onClick={orderHandler}
+                  variant="danger"
+                  type="button"
+                  // disabled={buttonDisabled}
+                >
                   Place order
                 </Button>
               </div>

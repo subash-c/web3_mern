@@ -45,8 +45,8 @@ const OrderDetailsPageComponent = ({ getOrder, markAsDelivered }) => {
         }
         setCartItems(order.cartItems);
       })
-      .catch((er) =>
-      dispatch(logout())
+      .catch(
+        (er) => dispatch(logout())
         // console.log(
         //   er.response.data.message ? er.response.data.message : er.response.data
         // )
@@ -69,6 +69,7 @@ const OrderDetailsPageComponent = ({ getOrder, markAsDelivered }) => {
             <Col md={6}>
               <h2>Payment method</h2>
               <Form.Select value={paymentMethod} disabled={true}>
+                <option value="pp">Pay using ether</option>
                 <option value="pp">PayPal</option>
                 <option value="cod">
                   Cash On Delivery (delivery may be delayed)
@@ -110,7 +111,9 @@ const OrderDetailsPageComponent = ({ getOrder, markAsDelivered }) => {
             </ListGroup.Item>
             <ListGroup.Item>
               Items price (after tax):{" "}
-              <span className="fw-bold">${cartSubtotal}</span>
+              <span className="fw-bold">
+                {(cartSubtotal / 9999999).toFixed(4)} ETH
+              </span>
             </ListGroup.Item>
             <ListGroup.Item>
               Shipping: <span className="fw-bold">included</span>
@@ -119,20 +122,29 @@ const OrderDetailsPageComponent = ({ getOrder, markAsDelivered }) => {
               Tax: <span className="fw-bold">included</span>
             </ListGroup.Item>
             <ListGroup.Item className="text-danger">
-              Total price: <span className="fw-bold">${cartSubtotal}</span>
+              Total price:{" "}
+              <span className="fw-bold">
+                {(cartSubtotal / 9999999).toFixed(4)} ETH
+              </span>
             </ListGroup.Item>
             <ListGroup.Item>
               <div className="d-grid gap-2">
                 <Button
                   size="lg"
-                  onClick={() => 
+                  onClick={() =>
                     markAsDelivered(id)
-                    .then((res) => {
-                       if (res) {
-                          setIsDelivered(true); 
-                       } 
-                    })
-                    .catch(er => console.log(er.response.data.message ? er.response.data.message : er.response.data))
+                      .then((res) => {
+                        if (res) {
+                          setIsDelivered(true);
+                        }
+                      })
+                      .catch((er) =>
+                        console.log(
+                          er.response.data.message
+                            ? er.response.data.message
+                            : er.response.data
+                        )
+                      )
                   }
                   disabled={buttonDisabled}
                   variant="danger"
