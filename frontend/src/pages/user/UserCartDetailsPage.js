@@ -22,6 +22,7 @@ const UserCartDetailsPage = () => {
     web3,
     provider,
     contract,
+    contractAddress,
   } = useWeb3();
   const { account } = useAccount(web3, provider);
   // const { userInfo } = useSelector((state) => state.userRegisterLogin);
@@ -46,7 +47,8 @@ const UserCartDetailsPage = () => {
       userInfo,
       web3,
       account,
-      contract
+      contract,
+      contractAddress
     );
     return;
 

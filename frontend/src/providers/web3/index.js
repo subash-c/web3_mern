@@ -2,7 +2,6 @@ import detectEthereumProvider from "@metamask/detect-provider";
 import Web3 from "web3";
 import { UseAccount } from "../../pages/hooks/UseAccount";
 import loadContract from "./loadContract";
-const contract = loadContract;
 
 const {
   createContext,
@@ -19,6 +18,7 @@ export default function Web3Provider({ children }) {
     provider: null,
     web3: null,
     contract: null,
+    contractAddress: null,
     isLoading: true,
   });
 
@@ -26,16 +26,13 @@ export default function Web3Provider({ children }) {
     const loadProvider = async () => {
       const provider = await detectEthereumProvider();
       if (provider) {
-        // const contract = loadContract("Marketplace", provider);
-        // const provider = new ethers.providers.JsonRpcProvider("YOUR_ETHEREUM_RPC_URL");
-        // const contract = new Contract(contractAddress, contractABI, provider);
-
         const web3 = new Web3(provider);
-        const contract1 = await contract(web3);
+        const { contract, contractAddress } = await loadContract(web3);
         setWeb3Api({
           provider,
           web3,
-          contract: contract1,
+          contract: contract,
+          contractAddress,
           isLoading: false,
         });
       } else {

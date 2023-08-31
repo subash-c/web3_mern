@@ -44,7 +44,7 @@
 
 // export default loadContract;
 
-// --- Ude --
+// --- Another Approach --
 
 const NETWORK_ID = 5777;
 
@@ -64,7 +64,10 @@ const loadContract = async (provider) => {
     );
     console.log(contract);
 
-    return contract;
+    return {
+      contract: contract,
+      contractAddress: Artifact.networks[NETWORK_ID].address,
+    };
   } else {
     return Promise.reject(`Contract: [MarketPlace] cannot be loaded!`);
   }

@@ -1,4 +1,11 @@
-const paymentEth = async (item, userInfo, web3, account, contract) => {
+const paymentEth = async (
+  item,
+  userInfo,
+  web3,
+  account,
+  contract,
+  contractAddress
+) => {
   const objectIdHexString = item.productID.toString();
   const paddedHexString = objectIdHexString.padStart(64, "0");
   const hexCourseId = "0x" + paddedHexString;
@@ -17,17 +24,20 @@ const paymentEth = async (item, userInfo, web3, account, contract) => {
   const value = web3.utils.toWei(String(item.price / 9999999), "ether");
 
   try {
-    const gasPriceGwei = 1; // Specify the gas price in Gwei
+    // const gasPriceGwei = 1; // Specify the gas price in Gwei
     console.log("Purccc");
-    const gasPriceWei = web3.utils.toWei(String(gasPriceGwei), "ether");
-    const result = await contract.methods
-      .purchaseCourse(hexCourseId, proof)
-      .send({
-        from: account,
-        value,
-      });
+    // const gasPriceWei = web3.utils.toWei(String(gasPriceGwei), "ether");
+
+    const txObject = {
+      from: account,
+      to: contractAddress,
+      data: contract.methods.purchaseCourse(hexCourseId, proof).encodeABI(),
+      value,
+    };
+
+    const result = await web3.eth.sendTransaction(txObject);
     console.log(result);
-    return { status: false, data: result };
+    return { data: result };
   } catch (err) {
     // console.log(item.price, value);
     console.log(await contract.methods);
