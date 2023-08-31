@@ -16,11 +16,8 @@ const paymentEth = async (
   );
 
   const emailHash = web3.utils.sha3(userInfo.email);
-  console.log(userInfo.email, emailHash);
   const proof = web3.utils.keccak256(emailHash + orderHash);
 
-  console.log("Item,", proof, hexCourseId);
-  console.log(item.price);
   const value = web3.utils.toWei(String(item.price / 9999999), "ether");
 
   try {
@@ -37,12 +34,10 @@ const paymentEth = async (
 
     const result = await web3.eth.sendTransaction(txObject);
     console.log(result);
-    return { data: result };
+    return result;
   } catch (err) {
-    // console.log(item.price, value);
-    console.log(await contract.methods);
     console.error("Purchase course: Operation has failed.", err);
-    console.log(err.receipt);
+    return null;
   }
 };
 

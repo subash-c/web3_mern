@@ -29,7 +29,7 @@ const UserCartDetailsPageComponent = ({
   const [missingAddress, setMissingAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("pp");
   const [status, setStatus] = useState([]);
-  const [change, setChange] = useState(false);
+  const [change, setChange] = useState("Place order");
   const { connect, isLoading, isWeb3Loaded, useAccount, web3, provider } =
     useWeb3();
   const { account, network, targetNetwork, isSupported } = useAccount(
@@ -106,13 +106,6 @@ const UserCartDetailsPageComponent = ({
         console.log("data=", data);
         if (data) {
           // navigate("/user/order-details/" + data._id);
-          let changeStatus = status;
-          data.map((item, idx) => {
-            changeStatus[idx] = { status: item.status, start: false };
-          });
-          setStatus(changeStatus);
-          setChange(!change);
-          console.log("ST=", status);
         }
       })
       .catch((err) => console.log("error", err));
@@ -123,8 +116,11 @@ const UserCartDetailsPageComponent = ({
   };
 
   useEffect(
-    () => setStatus(cartItems.map((item) => ({ status: false, start: true }))),
-    []
+    () =>
+      setStatus(
+        cartItems.map((item) => ({ status: "Place order", start: true }))
+      ),
+    [cartItems]
   );
   // console.log(status);
 
@@ -153,16 +149,11 @@ const UserCartDetailsPageComponent = ({
                 </>
               ) : null}
               <b>Sender</b>: {account} <br />
-              {/* <b>Receiver</b>: {userInfo.name} {userInfo.lastName} <br /> */}
             </Col>
             <Col md={6}>
               <h2>Payment method</h2>
               <Form.Select onChange={choosePayment}>
                 <option>Pay using ether</option>
-                {/* <option value="pp">PayPal</option>
-                <option value="cod">
-                  Cash On Delivery (delivery may be delayed)
-                </option> */}
               </Form.Select>
             </Col>
             <Row>
@@ -180,18 +171,6 @@ const UserCartDetailsPageComponent = ({
             </Row>
           </Row>
           <br />
-          <h2>Order items</h2>
-          <ListGroup variant="flush">
-            {cartItems.map((item, idx) => (
-              <CartItemComponent
-                item={item}
-                key={idx}
-                removeFromCartHandler={removeFromCartHandler}
-                changeCount={changeCount}
-                status={status[idx]}
-              />
-            ))}
-          </ListGroup>
         </Col>
         <Col md={4}>
           <ListGroup>
@@ -231,6 +210,26 @@ const UserCartDetailsPageComponent = ({
             </ListGroup.Item>
           </ListGroup>
         </Col>
+      </Row>
+      <Row className="mt-4">
+        <Row>
+          <h2>Order items</h2>
+        </Row>
+        <Row>
+          {console.log(status)}
+          <ListGroup variant="flush">
+            {cartItems.map((item, idx) => (
+              <CartItemComponent
+                item={item}
+                key={idx}
+                removeFromCartHandler={removeFromCartHandler}
+                changeCount={changeCount}
+                status={status[idx] ? status[idx].status : "Place order"}
+                createOrder={createOrder}
+              />
+            ))}
+          </ListGroup>
+        </Row>
       </Row>
     </Container>
   );
