@@ -30,6 +30,7 @@ const CartPageComponent = ({
             <ListGroup variant="flush">
               {cartItems.map((item, idx) => (
                 <CartItemComponent
+                  show={false}
                   item={item}
                   key={idx}
                   changeCount={changeCount}

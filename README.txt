@@ -1,7 +1,13 @@
+Marketplace website with Web3 integrated payment.
+
+Things in progess:
+	UI development
+	Showing orders
+	Extra functionalities
 
 Make sure you have your own credentials:
  - in backend/.env file for MONGO_URI variable
- - frontend/src/pages/user/UserOrderDetailsPage.js for PayPal client-id
+ - frontend/src/pages/user/UserOrderDetailsPage.js for paying on ether.
 
 1. Open terminal on the frontend folder and run "npm install"
 2. Open terminal on the backend folder and run "npm install"
@@ -9,4 +15,4 @@ Make sure you have your own credentials:
 4. Optionally run seeders by running "npm run seed:data" (being in the backend folder)
 
 
-Web3 integration is in progress...
+

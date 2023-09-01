@@ -4,6 +4,7 @@ import { useState } from "react";
 
 const CartItemComponent = ({
   item,
+  show = true,
   createOrder,
   removeFromCartHandler = false,
   orderCreated = false,
@@ -11,6 +12,7 @@ const CartItemComponent = ({
   status,
 }) => {
   const [statusChange, setStatusChange] = useState(status);
+  const [mul, setMul] = useState(item.quantity);
   console.log(status);
   const orderHandler = () => {
     const orderData = {
@@ -38,7 +40,6 @@ const CartItemComponent = ({
         console.log("error", err);
       });
   };
-
   return (
     <>
       <ListGroup.Item>
@@ -50,15 +51,18 @@ const CartItemComponent = ({
               fluid
             />
           </Col>
-          <Col md={2}>{item.name}</Col>
+          <Col md={show ? 2 : 3}>{item.name}</Col>
           <Col md={2}>
-            <b>{item.price / 9999999} ETH</b>
+            <b>{(item.price / 9999999) * mul} ETH</b>
           </Col>
-          <Col md={2}>
+          <Col md={show ? 2 : 3}>
             <Form.Select
               onChange={
                 changeCount
-                  ? (e) => changeCount(item.productID, e.target.value)
+                  ? (e) => {
+                      changeCount(item.productID, e.target.value);
+                      setMul(e.target.value);
+                    }
                   : undefined
               }
               disabled={orderCreated}
@@ -82,30 +86,34 @@ const CartItemComponent = ({
               }
             />
           </Col>
-          <Col md={2}>
-            <div className="d-grid gap-2">
-              <Button
-                size="md"
-                style={{ "z-index": "8080" }}
-                onClick={orderHandler}
-                variant={
-                  statusChange === "Placed 🙂" || statusChange === "Loading..."
-                    ? "success"
-                    : statusChange === "Place order"
-                    ? "secondary"
-                    : "danger"
-                }
-                type="button"
-                disabled={
-                  statusChange === "Loading..." || statusChange === "Placed 🙂"
-                    ? true
-                    : false
-                }
-              >
-                {statusChange}
-              </Button>
-            </div>
-          </Col>
+          {show ? (
+            <Col md={2}>
+              <div className="d-grid gap-2">
+                <Button
+                  size="md"
+                  style={{ "z-index": "8080" }}
+                  onClick={orderHandler}
+                  variant={
+                    statusChange === "Placed 🙂" ||
+                    statusChange === "Loading..."
+                      ? "success"
+                      : statusChange === "Place order"
+                      ? "secondary"
+                      : "danger"
+                  }
+                  type="button"
+                  disabled={
+                    statusChange === "Loading..." ||
+                    statusChange === "Placed 🙂"
+                      ? true
+                      : false
+                  }
+                >
+                  {statusChange}
+                </Button>
+              </div>
+            </Col>
+          ) : null}
         </Row>
       </ListGroup.Item>
     </>

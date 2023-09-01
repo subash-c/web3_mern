@@ -62,7 +62,7 @@ const UserCartDetailsPageComponent = ({
         ) {
           setButtonDisabled(true);
           setMissingAddress(
-            " .In order to make order, fill out your profile with correct address, city etc."
+            " Check your account address before making transaction"
           );
         } else {
           setUserAddress({
@@ -159,13 +159,13 @@ const UserCartDetailsPageComponent = ({
             <Row>
               <Col>
                 <Alert className="mt-3" variant="danger">
-                  Not delivered
+                  {/* Not delivered */}
                   {missingAddress}
                 </Alert>
               </Col>
               <Col>
                 <Alert className="mt-3" variant="success">
-                  Not paid yet
+                  Make payment using Ether
                 </Alert>
               </Col>
             </Row>
@@ -191,9 +191,7 @@ const UserCartDetailsPageComponent = ({
             </ListGroup.Item>
             <ListGroup.Item className="text-danger">
               Total price:{" "}
-              <span className="fw-bold">
-                {(cartSubtotal / 9999999).toFixed(4)} ETH
-              </span>
+              <span className="fw-bold">{cartSubtotal / 9999999} ETH</span>
             </ListGroup.Item>
             <ListGroup.Item>
               <div className="d-grid gap-2">
@@ -202,9 +200,9 @@ const UserCartDetailsPageComponent = ({
                   onClick={orderHandler}
                   variant="danger"
                   type="button"
-                  // disabled={buttonDisabled}
+                  disabled={true}
                 >
-                  Place order
+                  Check the price before making transaction
                 </Button>
               </div>
             </ListGroup.Item>
