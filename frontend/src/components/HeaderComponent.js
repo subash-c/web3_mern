@@ -41,8 +41,8 @@ const HeaderComponent = () => {
   const navigate = useNavigate();
 
   const truncateAddress = (address) => {
-    return `${address.substring(0, 5)}...${address.substring(
-      address.length - 4
+    return `${address.substring(0, 9)}...${address.substring(
+      address.length - 9
     )}`;
   };
 
@@ -125,118 +125,121 @@ const HeaderComponent = () => {
   // console.log(web3);
 
   return (
-    <Navbar
-      collapseOnSelect
-      expand="lg"
-      variant="dark"
-      className={`custom-navbar ${
-        visible ? "navbar-visible" : "navbar-hidden"
-      }`}
-    >
-      <Container>
-        <LinkContainer to="/">
-          <Navbar.Brand href="/">C.S 🛍</Navbar.Brand>
-        </LinkContainer>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="me-auto">
-            <InputGroup>
-              <DropdownButton
-                id="dropdown-basic-button"
-                title={searchCategoryToggle}
-              >
-                <Dropdown.Item onClick={() => setSearchCategoryToggle("All")}>
-                  All
-                </Dropdown.Item>
-                {categories.map((category, id) => (
-                  <Dropdown.Item
-                    key={id}
-                    onClick={() => setSearchCategoryToggle(category.name)}
-                  >
-                    {category.name}
+    <Container fluid className="paddingColor">
+      <Navbar
+        collapseOnSelect
+        expand="lg"
+        variant="dark"
+        className={`custom-navbar ${
+          visible ? "navbar-visible" : "navbar-hidden"
+        }`}
+      >
+        <Container fluid>
+          <LinkContainer to="/">
+            <Navbar.Brand href="/">C.S 🛍</Navbar.Brand>
+          </LinkContainer>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto">
+              <InputGroup>
+                <DropdownButton
+                  id="dropdown-basic-button"
+                  title={searchCategoryToggle}
+                >
+                  <Dropdown.Item onClick={() => setSearchCategoryToggle("All")}>
+                    All
                   </Dropdown.Item>
-                ))}
-              </DropdownButton>
-              <Form.Control
-                className="col-md-6 "
-                onKeyUp={submitHandler}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                type="text"
-                placeholder="Type to search ..."
-              />
-              <Button onClick={submitHandler} variant="warning">
-                <i className="bi bi-search text-dark"></i>
-              </Button>
-            </InputGroup>
-          </Nav>
-          <Nav>
-            {userInfo.isAdmin ? (
-              <LinkContainer to="/admin/orders">
+                  {categories.map((category, id) => (
+                    <Dropdown.Item
+                      key={id}
+                      onClick={() => setSearchCategoryToggle(category.name)}
+                    >
+                      {category.name}
+                    </Dropdown.Item>
+                  ))}
+                </DropdownButton>
+                <Form.Control
+                  id="aa"
+                  className=" col-lg-6 "
+                  onKeyUp={submitHandler}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  type="text"
+                  placeholder="Type here to search ..."
+                />
+                <Button onClick={submitHandler} variant="warning">
+                  <i className="bi bi-search text-dark"></i>
+                </Button>
+              </InputGroup>
+            </Nav>
+            <Nav>
+              {userInfo.isAdmin ? (
+                <LinkContainer to="/admin/orders">
+                  <Nav.Link>
+                    Admin
+                    {messageReceived && (
+                      <span className="position-absolute top-1 start-10 translate-middle p-2 bg-danger border border-light rounded-circle"></span>
+                    )}
+                  </Nav.Link>
+                </LinkContainer>
+              ) : userInfo.name && !userInfo.isAdmin ? (
+                <NavDropdown
+                  title={`${userInfo.name} ${userInfo.lastName}`}
+                  id="collasible-nav-dropdown"
+                >
+                  <NavDropdown.Item
+                    eventKey="/user/my-orders"
+                    as={Link}
+                    to="/user/my-orders"
+                  >
+                    My orders
+                  </NavDropdown.Item>
+                  <NavDropdown.Item eventKey="/user" as={Link} to="/user">
+                    My profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => dispatch(logout())}>
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <>
+                  <LinkContainer to="/login">
+                    <Nav.Link>Login</Nav.Link>
+                  </LinkContainer>
+                  <LinkContainer to="/register">
+                    <Nav.Link>Register</Nav.Link>
+                  </LinkContainer>
+                </>
+              )}
+
+              <LinkContainer to="/cart">
                 <Nav.Link>
-                  Admin
-                  {messageReceived && (
-                    <span className="position-absolute top-1 start-10 translate-middle p-2 bg-danger border border-light rounded-circle"></span>
-                  )}
+                  <Badge pill bg="danger">
+                    {itemsCount === 0 ? "" : itemsCount}
+                  </Badge>
+                  <i className="bi bi-cart-dash"></i>
+                  <span className="ms-1">CART</span>
                 </Nav.Link>
               </LinkContainer>
-            ) : userInfo.name && !userInfo.isAdmin ? (
-              <NavDropdown
-                title={`${userInfo.name} ${userInfo.lastName}`}
-                id="collasible-nav-dropdown"
-              >
-                <NavDropdown.Item
-                  eventKey="/user/my-orders"
-                  as={Link}
-                  to="/user/my-orders"
-                >
-                  My orders
-                </NavDropdown.Item>
-                <NavDropdown.Item eventKey="/user" as={Link} to="/user">
-                  My profile
-                </NavDropdown.Item>
-                <NavDropdown.Item onClick={() => dispatch(logout())}>
-                  Logout
-                </NavDropdown.Item>
-              </NavDropdown>
-            ) : (
-              <>
-                <LinkContainer to="/login">
-                  <Nav.Link>Login</Nav.Link>
-                </LinkContainer>
-                <LinkContainer to="/register">
-                  <Nav.Link>Register</Nav.Link>
-                </LinkContainer>
-              </>
-            )}
-
-            <LinkContainer to="/cart">
-              <Nav.Link>
-                <Badge pill bg="danger">
-                  {itemsCount === 0 ? "" : itemsCount}
-                </Badge>
-                <i className="bi bi-cart-dash"></i>
-                <span className="ms-1">CART</span>
-              </Nav.Link>
-            </LinkContainer>
-            {/* <Button variant="primary"> */}
-            <LinkContainer to="/accountw3">
-              <Nav.Link disabled={isLoading ? true : false}>
-                <span onClick={connect} className="ms-1">
-                  {isLoading
-                    ? "Loading..."
-                    : isWeb3Loaded
-                    ? account
-                      ? truncateAddress(account)
-                      : "Connect"
-                    : "Please install metamask 🦊"}
-                </span>
-              </Nav.Link>
-            </LinkContainer>
-            {/* </Button> */}
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+              {/* <Button variant="primary"> */}
+              <LinkContainer to="/accountw3">
+                <Nav.Link disabled={isLoading ? true : false}>
+                  <span onClick={connect} className="ms-1">
+                    {isLoading
+                      ? "Loading..."
+                      : isWeb3Loaded
+                      ? account
+                        ? truncateAddress(account)
+                        : "Connect"
+                      : "Please install metamask 🦊"}
+                  </span>
+                </Nav.Link>
+              </LinkContainer>
+              {/* </Button> */}
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </Container>
   );
 };
 

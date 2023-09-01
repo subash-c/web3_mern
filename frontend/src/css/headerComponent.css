@@ -53,3 +53,11 @@
 .navbar-visible {
   /* position: fixed; */
 }
+
+#aa {
+  width: 30rem;
+}
+
+.paddingColor {
+  background-color: var(--primary-color);
+}
