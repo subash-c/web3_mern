@@ -126,36 +126,47 @@ const UserCartDetailsPageComponent = ({
 
   return (
     <Container fluid>
-      <Row className="mt-4">
-        <h1>Cart Details</h1>
-        <Col md={8}>
-          <br />
-          <Row>
-            <Col md={6}>
-              <h2>Shipping</h2>
-              <b>Name</b>: {userInfo.name} {userInfo.lastName} <br />
-              {userAddress.address ? (
-                <>
-                  <b>Address</b>
+      <Row>
+        <div>
+          <br />{" "}
+        </div>
+      </Row>
+      <Container fluid>
+        <Row className="justify-content-md-center">
+          <Col md="auto">
+            <h1>Cart Details</h1>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={8}>
+            <br />
+            <Row>
+              <Col md={6}>
+                <h2>Shipping</h2>
+                <b>Name</b>: {userInfo.name} {userInfo.lastName} <br />
+                {userAddress.address ? (
                   <>
-                    : {userAddress.address} {userAddress.city}{" "}
-                    {userAddress.state} {userAddress.zipCode} <br />
+                    <b>Address</b>
+                    <>
+                      : {userAddress.address} {userAddress.city}{" "}
+                      {userAddress.state} {userAddress.zipCode} <br />
+                    </>
                   </>
-                </>
-              ) : null}
-              {userAddress.phoneNumber ? (
-                <>
-                  <b>Phone</b>: {userAddress.phoneNumber}
-                </>
-              ) : null}
-              <b>Sender</b>: {account} <br />
-            </Col>
-            <Col md={6}>
-              <h2>Payment method</h2>
-              <Form.Select onChange={choosePayment}>
-                <option>Pay using ether</option>
-              </Form.Select>
-            </Col>
+                ) : null}
+                {userAddress.phoneNumber ? (
+                  <>
+                    <b>Phone</b>: {userAddress.phoneNumber}
+                  </>
+                ) : null}
+                <b>Sender</b>: {account} <br />
+              </Col>
+              <Col md={6}>
+                <h2>Payment method</h2>
+                <Form.Select onChange={choosePayment}>
+                  <option>Pay using ether</option>
+                </Form.Select>
+              </Col>
+            </Row>
             <Row>
               <Col>
                 <Alert className="mt-3" variant="danger">
@@ -169,66 +180,67 @@ const UserCartDetailsPageComponent = ({
                 </Alert>
               </Col>
             </Row>
+
+            <br />
+          </Col>
+          <Col md={4}>
+            <ListGroup>
+              <ListGroup.Item>
+                <h3>Order summary</h3>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                Items price (after tax):{" "}
+                <span className="fw-bold">
+                  {(cartSubtotal / 9999999).toFixed(4)} ETH
+                </span>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                Shipping: <span className="fw-bold">included</span>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                Tax: <span className="fw-bold">included</span>
+              </ListGroup.Item>
+              <ListGroup.Item className="text-danger">
+                Total price:{" "}
+                <span className="fw-bold">{cartSubtotal / 9999999} ETH</span>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <div className="d-grid gap-2">
+                  <Button
+                    size="lg"
+                    onChange={orderHandler}
+                    variant="danger"
+                    type="button"
+                    disabled={true}
+                  >
+                    Check the price before making transaction
+                  </Button>
+                </div>
+              </ListGroup.Item>
+            </ListGroup>
+          </Col>
+        </Row>
+        <Row className="mt-4">
+          <Row>
+            <h2>Order items</h2>
           </Row>
-          <br />
-        </Col>
-        <Col md={4}>
-          <ListGroup>
-            <ListGroup.Item>
-              <h3>Order summary</h3>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              Items price (after tax):{" "}
-              <span className="fw-bold">
-                {(cartSubtotal / 9999999).toFixed(4)} ETH
-              </span>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              Shipping: <span className="fw-bold">included</span>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              Tax: <span className="fw-bold">included</span>
-            </ListGroup.Item>
-            <ListGroup.Item className="text-danger">
-              Total price:{" "}
-              <span className="fw-bold">{cartSubtotal / 9999999} ETH</span>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              <div className="d-grid gap-2">
-                <Button
-                  size="lg"
-                  onClick={orderHandler}
-                  variant="danger"
-                  type="button"
-                  disabled={true}
-                >
-                  Check the price before making transaction
-                </Button>
-              </div>
-            </ListGroup.Item>
-          </ListGroup>
-        </Col>
-      </Row>
-      <Row className="mt-4">
-        <Row>
-          <h2>Order items</h2>
+          <Row>
+            {console.log(status)}
+            <ListGroup variant="flush">
+              {cartItems.map((item, idx) => (
+                <CartItemComponent
+                  item={item}
+                  key={idx}
+                  removeFromCartHandler={removeFromCartHandler}
+                  changeCount={changeCount}
+                  status={status[idx] ? status[idx].status : "Place order"}
+                  createOrder={createOrder}
+                />
+              ))}
+            </ListGroup>
+          </Row>
         </Row>
-        <Row>
-          {console.log(status)}
-          <ListGroup variant="flush">
-            {cartItems.map((item, idx) => (
-              <CartItemComponent
-                item={item}
-                key={idx}
-                removeFromCartHandler={removeFromCartHandler}
-                changeCount={changeCount}
-                status={status[idx] ? status[idx].status : "Place order"}
-                createOrder={createOrder}
-              />
-            ))}
-          </ListGroup>
-        </Row>
-      </Row>
+      </Container>
     </Container>
   );
 };

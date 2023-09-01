@@ -1,4 +1,12 @@
-import { Row, Col, Image, ListGroup, Form, Button } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Image,
+  ListGroup,
+  Form,
+  Button,
+  Badge,
+} from "react-bootstrap";
 import RemoveFromCartComponent from "./RemoveFromCartComponent";
 import { useState } from "react";
 
@@ -12,7 +20,9 @@ const CartItemComponent = ({
   status,
 }) => {
   const [statusChange, setStatusChange] = useState(status);
+  const [count, setCount] = useState(item.quantity);
   const [mul, setMul] = useState(item.quantity);
+  console.log("PPPP", item);
   console.log(status);
   const orderHandler = () => {
     const orderData = {
@@ -56,24 +66,50 @@ const CartItemComponent = ({
             <b>{(item.price / 9999999) * mul} ETH</b>
           </Col>
           <Col md={show ? 2 : 3}>
-            <Form.Select
-              onChange={
-                changeCount
-                  ? (e) => {
-                      changeCount(item.productID, e.target.value);
-                      setMul(e.target.value);
-                    }
-                  : undefined
-              }
-              disabled={orderCreated}
-              value={item.quantity}
-            >
-              {[...Array(item.count).keys()].map((x) => (
-                <option key={x + 1} value={x + 1}>
-                  {x + 1}
-                </option>
-              ))}
-            </Form.Select>
+            <Row className="justify-content-md-center">
+              <Col md={5} md="auto">
+                <Button
+                  variant="secondary"
+                  disabled={count === item.count ? true : false}
+                  onClick={
+                    changeCount && count + 1 <= item.count
+                      ? () => {
+                          changeCount(item.productID, count + 1);
+                          setMul(count + 1);
+
+                          setCount(count + 1);
+                        }
+                      : undefined
+                  }
+                >
+                  +
+                </Button>
+              </Col>
+              <Col md={2} md="auto">
+                <Button variant="outline-dark" disabled={true}>
+                  {count}
+                  {console.log(count)}
+                </Button>
+              </Col>
+              <Col md={5} md="auto">
+                <Button
+                  variant="secondary"
+                  disabled={count === 1 ? true : false}
+                  onClick={
+                    changeCount && count - 1 > 0
+                      ? () => {
+                          changeCount(item.productID, count - 1);
+                          setMul(count - 1);
+
+                          setCount(count - 1);
+                        }
+                      : undefined
+                  }
+                >
+                  -
+                </Button>
+              </Col>
+            </Row>
           </Col>
           <Col md={2}>
             <RemoveFromCartComponent
@@ -91,7 +127,7 @@ const CartItemComponent = ({
               <div className="d-grid gap-2">
                 <Button
                   size="md"
-                  style={{ "z-index": "8080" }}
+                  // style={{ "z-index": "8080" }}
                   onClick={orderHandler}
                   variant={
                     statusChange === "Placed 🙂" ||
