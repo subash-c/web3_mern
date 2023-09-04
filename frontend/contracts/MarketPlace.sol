@@ -1,123 +1,37 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity ^0.8.0;
 
 contract MarketPlace {
+    address public owner;  // Address of the owner (you)
+    address payable public ecommerceWallet;  // Address where payments will be received
 
-  enum State {
-    Purchased,
-    Activated,
-    Deactivated
-  }
+    event PaymentReceived(address indexed from, uint256 amount);
+    event PaymentSent(address indexed to, uint256 amount);
 
-  struct Course {
-    uint id; // 32
-    uint price; // 32
-    bytes32 proof; // 32
-    address owner; // 20
-    State state; // 1
-  }
-
-  // mapping of courseHash to Course data
-  mapping(bytes32 => Course) private ownedCourses;
-
-  // mapping of courseID to courseHash
-  mapping(uint => bytes32) private ownedCourseHash;
-
-  // number of all courses + id of the course
-  uint private totalOwnedCourses;
-
-  address payable private owner;
-
-  constructor() {
-    setContractOwner(msg.sender);
-  }
-
-  /// Course has already a Owner!
-  error CourseHasOwner();
-
-  /// Only owner has an access!
-  error OnlyOwner();
-
-  modifier onlyOwner() {
-    if (msg.sender != getContractOwner()) {
-      revert OnlyOwner();
-    }
-    _;
-  }
-
-  function purchaseCourse(
-    bytes32 courseId, // 0x00000000000000000000000000003130
-    bytes32 proof // 0x0000000000000000000000000000313000000000000000000000000000003130
-  )
-    external
-    payable
-  {
-    bytes32 courseHash = keccak256(abi.encodePacked(courseId, msg.sender));
-
-    if (hasCourseOwnership(courseHash)) {
-      revert CourseHasOwner();
+    constructor() {
+        owner = msg.sender;
+        ecommerceWallet = payable(owner);
     }
 
-    uint id = totalOwnedCourses++;
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only the owner can call this function");
+        _;
+    }
 
-    ownedCourseHash[id] = courseHash;
-    ownedCourses[courseHash] = Course({
-      id: id,
-      price: msg.value,
-      proof: proof,
-      owner: msg.sender,
-      state: State.Purchased
-    });
-  }
+    // Function to receive Ether payments
+    receive() external payable {
+        emit PaymentReceived(msg.sender, msg.value);
+    }
 
-  function transferOwnership(address newOwner)
-    external
-    onlyOwner
-  {
-    setContractOwner(newOwner);
-  }
+    // Function to withdraw funds from the contract (only owner)
+    function withdrawFunds(uint256 amount) public onlyOwner {
+        require(amount <= address(this).balance, "Insufficient balance");
+        ecommerceWallet.transfer(amount);
+    }
 
-  function getCourseCount()
-    external
-    view
-    returns (uint)
-  {
-    return totalOwnedCourses;
-  }
-
-  function getCourseHashAtIndex(uint index)
-    external
-    view
-    returns (bytes32)
-  {
-    return ownedCourseHash[index];
-  }
-
-  function getCourseByHash(bytes32 courseHash)
-    external
-    view
-    returns (Course memory)
-  {
-    return ownedCourses[courseHash];
-  }
-
-  function getContractOwner()
-    public
-    view
-    returns (address)
-  {
-    return owner;
-  }
-
-  function setContractOwner(address newOwner) private {
-    owner = payable(newOwner);
-  }
-
-  function hasCourseOwnership(bytes32 courseHash)
-    private
-    view
-    returns (bool)
-  {
-    return ownedCourses[courseHash].owner == msg.sender;
-  }
+    // Function to send a payment to the ecommerceWallet
+    function sendPayment() public payable {
+        require(msg.value > 0, "Payment amount must be greater than 0");
+        emit PaymentSent(ecommerceWallet, msg.value);
+    }
 }
