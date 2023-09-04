@@ -1,5 +1,7 @@
 import { useWeb3 } from "../providers";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
 import EthPrice from "../providers/web3/ethPrice";
 import {
   Container,
@@ -35,6 +37,8 @@ const AccountPageW3 = () => {
 
   const [currency, setCurrency] = useState(["Loading...", "Loading..."]);
   const [currencyChange, setCurrencyChange] = useState("Loading...");
+  const [loadOrders, setLoadOrders] = useState(false);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -61,6 +65,18 @@ const AccountPageW3 = () => {
         e.target.value.toLowerCase()
       ]
     );
+  };
+  const userInfo = useSelector((state) => state.userRegisterLogin.userInfo);
+
+  const fetchOrders = async () => {
+    try {
+      const orders = await axios.get("/api/orders");
+      // setLoadOrders(true);
+      return orders;
+    } catch (error) {
+      // Handle errors
+      return null;
+    }
   };
 
   return (
@@ -193,8 +209,6 @@ const AccountPageW3 = () => {
           <br />
           <Row></Row>
           <br />
-          <h2>Your orders:</h2>
-          <ListGroup variant="flush">There are no orders.</ListGroup>
         </Col>
       </Row>
     </Container>
