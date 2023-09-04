@@ -48,7 +48,7 @@
 
 const NETWORK_ID = 5777;
 
-const loadContract = async (provider) => {
+const loadContract = async (web3) => {
   if (!NETWORK_ID) {
     return Promise.reject("Network ID is not defined!");
   }
@@ -58,7 +58,7 @@ const loadContract = async (provider) => {
   const Artifact = await res.json();
   console.log("->", Artifact.networks[NETWORK_ID].address);
   if (Artifact.networks[NETWORK_ID].address) {
-    const contract = new provider.eth.Contract(
+    const contract = new web3.eth.Contract(
       Artifact.abi,
       Artifact.networks[NETWORK_ID].address
     );
