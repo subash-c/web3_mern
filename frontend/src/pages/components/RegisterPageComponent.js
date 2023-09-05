@@ -2,6 +2,8 @@ import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
+import axios from "axios";
+
 const RegisterPageComponent = ({
   registerUserApiRequest,
   reduxDispatch,
@@ -17,7 +19,9 @@ const RegisterPageComponent = ({
 
   const onChange = () => {
     const password = document.querySelector("input[name=password]");
-    const confirmPassword = document.querySelector("input[name=confirmPassword]");
+    const confirmPassword = document.querySelector(
+      "input[name=confirmPassword]"
+    );
     if (confirmPassword.value === password.value) {
       setPasswordsMatchState(true);
     } else {
@@ -49,7 +53,6 @@ const RegisterPageComponent = ({
             loading: false,
           });
           reduxDispatch(setReduxUserState(data.userCreated));
-          
         })
         .catch((er) =>
           setRegisterUserResponseState({
@@ -62,6 +65,14 @@ const RegisterPageComponent = ({
 
     setValidated(true);
   };
+
+  const emailCheck = async () => {
+    const data = "subashchinn@gmail.com";
+    console.log(data);
+    await axios.post("/api/users/email", { data });
+    console.log("676");
+  };
+
   return (
     <Container>
       <Row className="mt-5 justify-content-md-center">
@@ -145,6 +156,8 @@ const RegisterPageComponent = ({
               </Col>
             </Row>
 
+            {/* <Button onClick={emailCheck}>Verify</Button> */}
+
             <Button type="submit">
               {registerUserResponseState &&
               registerUserResponseState.loading === true ? (
@@ -160,10 +173,22 @@ const RegisterPageComponent = ({
               )}
               Submit
             </Button>
-            <Alert show={registerUserResponseState && registerUserResponseState.error === "user exists"} variant="danger">
+            <Alert
+              show={
+                registerUserResponseState &&
+                registerUserResponseState.error === "user exists"
+              }
+              variant="danger"
+            >
               User with that email already exists!
             </Alert>
-            <Alert show={registerUserResponseState && registerUserResponseState.success === "User created"} variant="info">
+            <Alert
+              show={
+                registerUserResponseState &&
+                registerUserResponseState.success === "User created"
+              }
+              variant="info"
+            >
               User created
             </Alert>
           </Form>

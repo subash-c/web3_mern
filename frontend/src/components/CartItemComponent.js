@@ -9,6 +9,8 @@ import {
 } from "react-bootstrap";
 import RemoveFromCartComponent from "./RemoveFromCartComponent";
 import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { addToCart, removeFromCart } from "../redux/actions/cartActions";
 
 const CartItemComponent = ({
   item,
@@ -19,6 +21,7 @@ const CartItemComponent = ({
   changeCount = false,
   status,
 }) => {
+  const reduxDispatch = useDispatch();
   const [statusChange, setStatusChange] = useState(status);
   const [count, setCount] = useState(item.quantity);
   const [mul, setMul] = useState(item.quantity);
@@ -44,6 +47,12 @@ const CartItemComponent = ({
         if (data) {
           // navigate("/user/order-details/" + data._id);
           setStatusChange("Placed 🙂");
+          console.log("===>", data);
+          setTimeout(() => {
+            reduxDispatch(
+              removeFromCart(item.productID, item.quantity, item.price)
+            );
+          }, 2000);
         } else setStatusChange("Retry again");
       })
       .catch((err) => {

@@ -28,6 +28,7 @@ const UserOrderDetailsPageComponent = ({
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
 
   const { id } = useParams();
 
@@ -61,6 +62,13 @@ const UserOrderDetailsPageComponent = ({
         setQuantity(data.quantity);
         setTotal(data.total);
         setDate(data.createdAt.substring(0, 10));
+        const timeComponents = new Date(data.createdAt)
+          .toLocaleTimeString("en-US")
+          .split(/:| /);
+
+        setTime(
+          ` ${timeComponents[0]}:${timeComponents[1]}:${timeComponents[2]}`
+        );
       })
       .catch((err) => console.log(err));
   }, []);
@@ -93,7 +101,7 @@ const UserOrderDetailsPageComponent = ({
           <br />
           <br />
           <b>Total amount : </b>
-          {price}{" "}
+          {total}{" "}
           <img
             alt="Ether"
             src={"/small-eth.webp"}
@@ -105,9 +113,12 @@ const UserOrderDetailsPageComponent = ({
         </Col>
       </Row>
       <Row style={{ paddingTop: "20px" }}>
-        <Col md={6}>
+        <Col md={4}>
           <b>Product name : </b>
           {name}
+        </Col>
+        <Col>
+          <b>Time : </b> {time}
         </Col>
         <Col>
           <b>Ordered date : </b>
