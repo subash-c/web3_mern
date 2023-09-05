@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 import axios from "axios";
+import ReCAPTCHA from "react-hcaptcha";
 
 const RegisterPageComponent = ({
   registerUserApiRequest,
@@ -10,6 +11,7 @@ const RegisterPageComponent = ({
   setReduxUserState,
 }) => {
   const [validated, setValidated] = useState(false);
+  const [captchaValue, setCaptchaValue] = useState(null);
   const [registerUserResponseState, setRegisterUserResponseState] = useState({
     success: "",
     error: "",
@@ -71,6 +73,15 @@ const RegisterPageComponent = ({
     console.log(data);
     await axios.post("/api/users/email", { data });
     console.log("676");
+  };
+
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+
+  // Callback function to handle captcha verification
+  const handleVerify = (token) => {
+    // console.log("Captcha verified:", token);
+    // setCaptchaToken(token);
+    setButtonDisabled(false);
   };
 
   return (
@@ -155,10 +166,12 @@ const RegisterPageComponent = ({
                 <Link to={"/login"}> Login </Link>
               </Col>
             </Row>
+            <ReCAPTCHA
+              sitekey={process.env.REACT_APP_PUBLIC_RECAPTCHA_SITE_KEY}
+              onVerify={handleVerify}
+            />
 
-            {/* <Button onClick={emailCheck}>Verify</Button> */}
-
-            <Button type="submit">
+            <Button type="submit" disabled={buttonDisabled}>
               {registerUserResponseState &&
               registerUserResponseState.loading === true ? (
                 <Spinner
