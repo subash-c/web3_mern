@@ -35,7 +35,7 @@ const CartItemComponent = ({
         count: item.count,
       },
 
-      // paymentMethod: paymentMethod,
+      // paymentMethod: "eth",
     };
     setStatusChange("Loading...");
     createOrder(orderData)

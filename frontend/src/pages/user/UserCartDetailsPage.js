@@ -32,15 +32,10 @@ const UserCartDetailsPage = () => {
   };
 
   const createOrder = async (orderData) => {
-    // const { data } = await axios.post("/api/orders", {
-    //   ...orderData,
-
-    //   account,
-    //   userInfo,
-    // });
-    // return data;
+    console.log("user", userInfo);
+    // return;
     const { cartItem } = orderData;
-    console.log(cartItem);
+    console.log("c", cartItem);
     const resultOrder = await paymentEth(
       cartItem,
       userInfo,
@@ -49,7 +44,27 @@ const UserCartDetailsPage = () => {
       contract,
       contractAddress
     );
-    return resultOrder;
+    // console.log("res", resultOrder);
+    // const sendTransaction = await resultOrder.sendPayment();
+
+    // if (sendTransaction.status) {
+    // console.log("see", sendTransaction);
+    // const transactionHash = sendTransaction.transactionHash;
+    try {
+      const { data } = await axios.post("/api/orders", {
+        cartItem,
+        transactionHash:
+          "0x44cc74c73f8c6b8886a8b637886e09d663ac45bebe191cfcfabb5d4cfe072897",
+        paymentMethod: "Ether",
+
+        account,
+        userInfo,
+      });
+      console.log("dataa", data);
+    } catch (e) {
+      console.log("er", e);
+    }
+    return;
   };
 
   return (

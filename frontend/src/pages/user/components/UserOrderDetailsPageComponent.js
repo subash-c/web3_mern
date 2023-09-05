@@ -3,6 +3,7 @@ import {
   Row,
   Col,
   Form,
+  Image,
   Alert,
   ListGroup,
   Button,
@@ -17,171 +18,104 @@ const UserOrderDetailsPageComponent = ({
   getOrder,
   loadPayPalScript,
 }) => {
-  const [userAddress, setUserAddress] = useState({});
+  const [userAddress, setUserAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
-  const [isPaid, setIsPaid] = useState(false);
-  const [orderButtonMessage, setOrderButtonMessage] = useState("");
-  const [cartItems, setCartItems] = useState([]);
-  const [cartSubtotal, setCartSubtotal] = useState(0);
-  const [isDelivered, setIsDelivered] = useState(false);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
-
-  const paypalContainer = useRef();
+  const [transactionHash, setTransactionHash] = useState("");
+  const [total, setTotal] = useState("");
+  const [name, setName] = useState("");
+  const [image, setImage] = useState(0);
+  const [count, setCount] = useState("");
+  const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [date, setDate] = useState("");
 
   const { id } = useParams();
 
-  useEffect(() => {
-    getUser()
-      .then((data) => {
-        setUserAddress({
-          address: data.address,
-          city: data.city,
-          country: data.country,
-          zipCode: data.zipCode,
-          state: data.state,
-          phoneNumber: data.phoneNumber,
-        });
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  // useEffect(() => {
+  //   getUser()
+  //     .then((data) => {
+  //       setCount(data.count);
+  //       setPaymentMethod(data.paymentMethod);
+  //       setImage(data.image);
+  //       setUserAddress(data.account);
+  //       setPrice(data.price);
+  //       setQuantity(data.quantity);
+  //       setTotal(data.total);
+  //       setDate(data.createdAt.substring(0, 10));
+  //     })
+  //     .catch((err) => console.log(err));
+  // }, []);
 
   useEffect(() => {
     getOrder(id)
       .then((data) => {
+        console.log("DD", data);
+        setCount(data.count);
+        setName(data.name);
         setPaymentMethod(data.paymentMethod);
-        setCartItems(data.cartItems);
-        setCartSubtotal(data.orderTotal.cartSubtotal);
-        data.isDelivered
-          ? setIsDelivered(data.deliveredAt)
-          : setIsDelivered(false);
-        data.isPaid ? setIsPaid(data.paidAt) : setIsPaid(false);
-        if (data.isPaid) {
-          setOrderButtonMessage("Your order is finished");
-          setButtonDisabled(true);
-        } else {
-          if (data.paymentMethod === "pp") {
-            setOrderButtonMessage("Pay for your order");
-          } else if (data.paymentMethod === "cod") {
-            setButtonDisabled(true);
-            setOrderButtonMessage("Wait for your order. You pay on delivery");
-          }
-        }
+        setTransactionHash(data.transactionHash);
+        setImage(data.image.path);
+        // console.log("img", image);
+        setUserAddress(data.account);
+        setPrice(data.price);
+        setQuantity(data.quantity);
+        setTotal(data.total);
+        setDate(data.createdAt.substring(0, 10));
       })
       .catch((err) => console.log(err));
   }, []);
 
-  const orderHandler = () => {
-    setButtonDisabled(true);
-    if (paymentMethod === "pp") {
-      setOrderButtonMessage(
-        "To pay for your order click one of the buttons below"
-      );
-      if (!isPaid) {
-        loadPayPalScript(cartSubtotal, cartItems, id, updateStateAfterOrder);
-      }
-    } else {
-      setOrderButtonMessage("Your order was placed. Thank you");
-    }
-  };
-
-  const updateStateAfterOrder = (paidAt) => {
-    setOrderButtonMessage("Thank you for your payment!");
-    setIsPaid(paidAt);
-    setButtonDisabled(true);
-    paypalContainer.current.style = "display: none";
-  };
-
   return (
-    <Container fluid>
-      <Row className="mt-4">
-        <h1>Order Details</h1>
-        <Col md={8}>
-          <br />
-          <Row>
-            <Col md={6}>
-              <h2>Shipping</h2>
-              <b>Name</b>: {userInfo.name} {userInfo.lastName} <br />
-              <b>Address</b>: {userAddress.address} {userAddress.city}{" "}
-              {userAddress.state} {userAddress.zipCode} <br />
-              <b>Phone</b>: {userAddress.phoneNumber}
-            </Col>
-            <Col md={6}>
-              <h2>Payment method</h2>
-              <Form.Select value={paymentMethod} disabled={true}>
-                <option value="pp">PayPal</option>
-                <option value="cod">
-                  Cash On Delivery (delivery may be delayed)
-                </option>
-              </Form.Select>
-            </Col>
-            <Row>
-              <Col>
-                <Alert
-                  className="mt-3"
-                  variant={isDelivered ? "success" : "danger"}
-                >
-                  {isDelivered ? (
-                    <>Delivered at {isDelivered}</>
-                  ) : (
-                    <>Not delivered</>
-                  )}
-                </Alert>
-              </Col>
-              <Col>
-                <Alert className="mt-3" variant={isPaid ? "success" : "danger"}>
-                  {isPaid ? <>Paid on {isPaid}</> : <>Not paid yet</>}
-                </Alert>
-              </Col>
-            </Row>
-          </Row>
-          <br />
-          <h2>Order items</h2>
-          <ListGroup variant="flush">
-            {cartItems.map((item, idx) => (
-              <CartItemComponent item={item} key={idx} orderCreated={true} />
-            ))}
-          </ListGroup>
+    <Container style={{ padding: "2%", margin: "0" }}>
+      <Row>
+        <Col md={6}>
+          <Image src={image} style={{ maxWidth: "90%", paddingTop: "2%" }} />
         </Col>
-        <Col md={4}>
-          <ListGroup>
-            <ListGroup.Item>
-              <h3>Order summary</h3>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              Items price (after tax):{" "}
-              <span className="fw-bold">
-                {(cartSubtotal / 9999999).toFixed(4)} ETH
-              </span>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              Shipping: <span className="fw-bold">included</span>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              Tax: <span className="fw-bold">included</span>
-            </ListGroup.Item>
-            <ListGroup.Item className="text-danger">
-              Total price:{" "}
-              <span className="fw-bold">
-                {(cartSubtotal / 9999999).toFixed(4)} ETH
-              </span>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              <div className="d-grid gap-2">
-                <Button
-                  size="lg"
-                  onClick={orderHandler}
-                  variant="danger"
-                  type="button"
-                  disabled={buttonDisabled}
-                >
-                  {orderButtonMessage}
-                </Button>
-              </div>
-              <div style={{ position: "relative", zIndex: 1 }}>
-                <div ref={paypalContainer} id="paypal-container-element"></div>
-              </div>
-            </ListGroup.Item>
-          </ListGroup>
+        <Col md={6}>
+          <b>Account : </b>
+          {userAddress}
+          <br />
+          <br />
+          <b>Transaction hash : </b>
+          {transactionHash}
+          <br />
+          <br />
+          <b>Price : </b> {price}{" "}
+          <img
+            src={"/small-eth.webp"}
+            alt="Ether"
+            style={{ width: "25px", paddingBottom: "5px" }}
+          />
+          <br />
+          <br />
+          <b>Quantity : </b>
+          {quantity}
+          <br />
+          <br />
+          <b>Total amount : </b>
+          {price}{" "}
+          <img
+            alt="Ether"
+            src={"/small-eth.webp"}
+            style={{ width: "25px", paddingBottom: "5px" }}
+          />
+          <br />
+          <br />
+          {/* <b>SS</b> */}
+        </Col>
+      </Row>
+      <Row style={{ paddingTop: "20px" }}>
+        <Col md={6}>
+          <b>Product name : </b>
+          {name}
+        </Col>
+        <Col>
+          <b>Ordered date : </b>
+          {date}
+        </Col>
+        <Col>
+          <b>Payment method : </b>
+          {paymentMethod}
         </Col>
       </Row>
     </Container>

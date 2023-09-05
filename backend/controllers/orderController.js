@@ -24,30 +24,40 @@ const getOrder = async (req, res, next) => {
 
 const createOrder = async (req, res, next) => {
   try {
-    const { cartItems, orderTotal, paymentMethod } = req.body;
-    if (!cartItems || !orderTotal || !paymentMethod) {
+    console.log(req.body);
+    const { cartItem, paymentMethod, transactionHash, account, userInfo } =
+      req.body;
+    if (!cartItem || !paymentMethod || !account || !userInfo) {
       return res.status(400).send("All inputs are required");
     }
-
-    let ids = cartItems.map((item) => {
-      return item.productID;
-    });
-    let qty = cartItems.map((item) => {
-      return Number(item.quantity);
-    });
-
-    await Product.find({ _id: { $in: ids } }).then((products) => {
-      products.forEach(function (product, idx) {
-        product.sales += qty[idx];
-        product.save();
-      });
-    });
-
+    console.log("BKUww");
+    let ids = [cartItem.productID];
+    let qty = [cartItem.quantity];
+    console.log("BKU");
+    // await Product.find({ _id: { $in: ids } }).then((products) => {
+    //   console.log(products);
+    //   products.forEach(function (product, idx) {
+    //     product.sales += qty[idx];
+    //     console.log("p", product);
+    //     product.save();
+    //   });
+    // });
+    console.log("BKU2", userInfo._id), ObjectId(userInfo._id);
+    console.log("CJVCHH");
     const order = new Order({
-      user: ObjectId(req.user._id),
-      orderTotal: orderTotal,
-      cartItems: cartItems,
-      paymentMethod: paymentMethod,
+      user: ObjectId(userInfo._id),
+      total: (qty[0] * cartItem.price) / 9999999,
+      quantity: qty[0],
+      name: cartItem.name,
+      price: cartItem.price / 9999999,
+      image: cartItem.image,
+      count: cartItem.count,
+
+      paymentMethod,
+
+      transactionHash: transactionHash,
+      account,
+      paymentMethod,
     });
     const createdOrder = await order.save();
     res.status(201).send(createdOrder);
