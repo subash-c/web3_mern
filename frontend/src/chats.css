@@ -29,6 +29,7 @@
 
 #check {
   display: none !important;
+  z-index: -4;
 }
 
 #check:checked ~ .chat-wrapper {
@@ -40,7 +41,7 @@
   position: fixed;
   right: 20px;
   bottom: 100px;
-  z-index: 2;
+  z-index: 0;
   width: 300px;
   transition: all 0.4s;
   background-color: #fff;
