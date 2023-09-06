@@ -40,6 +40,7 @@ const LoginPageComponent = ({
 
           if (res.userLoggedIn) {
             reduxDispatch(setReduxUserState(res.userLoggedIn));
+            // console.log("OOOO")
           }
 
           if (res.success === "user logged in" && !res.userLoggedIn.isAdmin)
