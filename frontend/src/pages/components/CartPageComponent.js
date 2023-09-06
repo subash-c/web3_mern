@@ -22,7 +22,7 @@ const CartPageComponent = ({
   return (
     <Container fluid>
       <Row className="mt-4">
-        <Col md={8}>
+        <Col md={9}>
           <h1>Shopping Cart</h1>
           {cartItems.length === 0 ? (
             <Alert variant="info">Your cart is empty</Alert>
@@ -40,7 +40,7 @@ const CartPageComponent = ({
             </ListGroup>
           )}
         </Col>
-        <Col md={4}>
+        <Col md={3}>
           <ListGroup>
             <ListGroup.Item>
               <h3>

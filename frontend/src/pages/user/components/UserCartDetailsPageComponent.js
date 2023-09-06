@@ -49,39 +49,39 @@ const UserCartDetailsPageComponent = ({
     }
   };
 
-  useEffect(() => {
-    getUser()
-      .then((data) => {
-        if (
-          !data.address ||
-          !data.city ||
-          !data.country ||
-          !data.zipCode ||
-          !data.state ||
-          !data.phoneNumber
-        ) {
-          setButtonDisabled(true);
-          setMissingAddress(
-            " Check your account address before making transaction"
-          );
-        } else {
-          setUserAddress({
-            address: data.address,
-            city: data.city,
-            country: data.country,
-            zipCode: data.zipCode,
-            state: data.state,
-            phoneNumber: data.phoneNumber,
-          });
-          setMissingAddress(false);
-        }
-      })
-      .catch((er) =>
-        console.log(
-          er.response.data.message ? er.response.data.message : er.response.data
-        )
-      );
-  }, [userInfo._id]);
+  // useEffect(() => {
+  //   getUser()
+  //     .then((data) => {
+  //       if (
+  //         !data.address ||
+  //         !data.city ||
+  //         !data.country ||
+  //         !data.zipCode ||
+  //         !data.state ||
+  //         !data.phoneNumber
+  //       ) {
+  //         setButtonDisabled(true);
+  //         setMissingAddress(
+  //           " Check your account address before making transaction"
+  //         );
+  //       } else {
+  //         setUserAddress({
+  //           address: data.address,
+  //           city: data.city,
+  //           country: data.country,
+  //           zipCode: data.zipCode,
+  //           state: data.state,
+  //           phoneNumber: data.phoneNumber,
+  //         });
+  //         setMissingAddress(false);
+  //       }
+  //     })
+  //     .catch((er) =>
+  //       console.log(
+  //         er.response.data.message ? er.response.data.message : er.response.data
+  //       )
+  //     );
+  // }, [userInfo._id]);
 
   const orderHandler = () => {
     const orderData = {
@@ -115,13 +115,17 @@ const UserCartDetailsPageComponent = ({
     setPaymentMethod(e.target.value);
   };
 
-  useEffect(
-    () =>
+  useEffect(() => {
+    let isCancelled = false;
+    if (!isCancelled) {
       setStatus(
         cartItems.map((item) => ({ status: "Place order", start: true }))
-      ),
-    [cartItems]
-  );
+      );
+    }
+    return () => {
+      isCancelled = true;
+    };
+  }, [cartItems]);
   // console.log(status);
 
   return (
@@ -158,7 +162,7 @@ const UserCartDetailsPageComponent = ({
                     <b>Phone</b>: {userAddress.phoneNumber}
                   </>
                 ) : null}
-                <b>Sender</b>: {account} <br />
+                <b>Account</b>: {account} <br />
               </Col>
               <Col md={6}>
                 <h2>Payment method</h2>
@@ -169,13 +173,24 @@ const UserCartDetailsPageComponent = ({
             </Row>
             <Row>
               <Col>
-                <Alert className="mt-3" variant="danger">
-                  {/* Not delivered */}
-                  {missingAddress}
-                </Alert>
+                {account ? (
+                  isSupported ? (
+                    <Alert className="mt-3" variant="warning">
+                      Account address for making transaction
+                    </Alert>
+                  ) : (
+                    <Alert className="mt-3" variant="danger">
+                      Change the network to {targetNetwork}
+                    </Alert>
+                  )
+                ) : (
+                  <Alert className="mt-3" variant="danger">
+                    Please install metamask and connect to place order
+                  </Alert>
+                )}
               </Col>
               <Col>
-                <Alert className="mt-3" variant="success">
+                <Alert className="mt-3" variant="warning">
                   Make payment using Ether
                 </Alert>
               </Col>
@@ -188,55 +203,62 @@ const UserCartDetailsPageComponent = ({
               <ListGroup.Item>
                 <h3>Order summary</h3>
               </ListGroup.Item>
-              <ListGroup.Item>
-                Items price (after tax):{" "}
+              {/* <ListGroup.Item>
+                Items price :{" "}
                 <span className="fw-bold">
                   {(cartSubtotal / 9999999).toFixed(4)} ETH
                 </span>
-              </ListGroup.Item>
+              </ListGroup.Item> */}
               <ListGroup.Item>
-                Shipping: <span className="fw-bold">included</span>
+                Gas price: <span className="fw-bold">Refer metamask</span>
               </ListGroup.Item>
-              <ListGroup.Item>
-                Tax: <span className="fw-bold">included</span>
-              </ListGroup.Item>
+              {/* <ListGroup.Item>
+                Tax: <span className="fw-bold">not included</span>
+              </ListGroup.Item> */}
               <ListGroup.Item className="text-danger">
                 Total price:{" "}
                 <span className="fw-bold">{cartSubtotal / 9999999} ETH</span>
               </ListGroup.Item>
-              <ListGroup.Item>
+              {/* <ListGroup.Item>
                 <div className="d-grid gap-2">
                   <Button
                     size="lg"
                     onChange={orderHandler}
-                    variant="danger"
+                    variant="light"
                     type="button"
                     disabled={true}
                   >
                     Check the price before making transaction
                   </Button>
                 </div>
-              </ListGroup.Item>
+              </ListGroup.Item> */}
             </ListGroup>
           </Col>
         </Row>
         <Row className="mt-4">
           <Row>
-            <h2>Order items</h2>
+            <h2>
+              Items in cart :{" "}
+              {cartItems.length ? `${cartItems.length} items` : " No items"}
+            </h2>
           </Row>
           <Row>
             {console.log(status)}
             <ListGroup variant="flush">
-              {cartItems.map((item, idx) => (
-                <CartItemComponent
-                  item={item}
-                  key={idx}
-                  removeFromCartHandler={removeFromCartHandler}
-                  changeCount={changeCount}
-                  status={status[idx] ? status[idx].status : "Place order"}
-                  createOrder={createOrder}
-                />
-              ))}
+              {cartItems.length
+                ? cartItems.map((item, idx) => (
+                    <CartItemComponent
+                      item={item}
+                      key={idx}
+                      removeFromCartHandler={removeFromCartHandler}
+                      changeCount={changeCount}
+                      status={status[idx] ? status[idx].status : "Place order"}
+                      createOrder={createOrder}
+                      metamaskConnect={account ? false : true}
+                      network={!isSupported}
+                    />
+                  ))
+                : null}
             </ListGroup>
           </Row>
         </Row>

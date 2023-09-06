@@ -20,6 +20,8 @@ const CartItemComponent = ({
   orderCreated = false,
   changeCount = false,
   status,
+  metamaskConnect = false,
+  network = false,
 }) => {
   const reduxDispatch = useDispatch();
   const [statusChange, setStatusChange] = useState(status);
@@ -68,6 +70,7 @@ const CartItemComponent = ({
               crossOrigin="anonymous"
               src={item.image ? item.image.path ?? null : null}
               fluid
+              style={{ maxHeight: "5rem" }}
             />
           </Col>
           <Col md={show ? 2 : 3}>{item.name}</Col>
@@ -148,13 +151,20 @@ const CartItemComponent = ({
                   }
                   type="button"
                   disabled={
-                    statusChange === "Loading..." ||
+                    (statusChange === "Loading..." ||
                     statusChange === "Placed 🙂"
                       ? true
-                      : false
+                      : false) ||
+                    metamaskConnect ||
+                    network
                   }
                 >
-                  {statusChange}
+                  {/* {console.log("CTYFY", network)} */}
+                  {metamaskConnect
+                    ? "Connect metamask"
+                    : network
+                    ? "Change network"
+                    : statusChange}
                 </Button>
               </div>
             </Col>

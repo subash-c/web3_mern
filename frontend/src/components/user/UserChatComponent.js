@@ -12,6 +12,7 @@ const UserChatComponent = () => {
   //   ]
   const [chat, setChat] = useState([]);
   const [messageReceived, setMessageReceived] = useState(false);
+  const [zIndex, setZindex] = useState(-2);
   const [chatConnectionInfo, setChatConnectionInfo] = useState(false);
   const [reconnect, setReconnect] = useState(false);
 
@@ -19,29 +20,31 @@ const UserChatComponent = () => {
 
   useEffect(() => {
     if (!userInfo.isAdmin) {
-        setReconnect(false);
-         var audio = new Audio("/audio/chat-msg.mp3");
+      setReconnect(false);
+      var audio = new Audio("/audio/chat-msg.mp3");
       const socket = socketIOClient();
       socket.on("no admin", (msg) => {
-          setChat((chat) => {
-              return [...chat, { admin: "no admin here now" }];
-          })
-      })
+        setChat((chat) => {
+          return [...chat, { admin: "no admin here now" }];
+        });
+      });
       socket.on("server sends message from admin to client", (msg) => {
-          setChat((chat) => {
-              return [...chat, { admin: msg }];
-          })
-          setMessageReceived(true);
-          audio.play();
-          const chatMessages = document.querySelector(".cht-msg");
-          chatMessages.scrollTop = chatMessages.scrollHeight;
-      })
+        setChat((chat) => {
+          return [...chat, { admin: msg }];
+        });
+        setMessageReceived(true);
+        audio.play();
+        const chatMessages = document.querySelector(".cht-msg");
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      });
       setSocket(socket);
       socket.on("admin closed chat", () => {
-         setChat([]); 
-         setChatConnectionInfo("Admin closed chat. Type something and submit to reconnect");
-         setReconnect(true);
-      })
+        setChat([]);
+        setChatConnectionInfo(
+          "Admin closed chat. Type something and submit to reconnect"
+        );
+        setReconnect(true);
+      });
       return () => socket.disconnect();
     }
   }, [userInfo.isAdmin, reconnect]);
@@ -63,28 +66,30 @@ const UserChatComponent = () => {
     });
     msg.focus();
     setTimeout(() => {
-         msg.value = "";
-         const chatMessages = document.querySelector(".cht-msg");
-         chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 200)
+      msg.value = "";
+      const chatMessages = document.querySelector(".cht-msg");
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 200);
   };
 
   return !userInfo.isAdmin ? (
     <>
       <input type="checkbox" id="check" />
       <label className="chat-btn" htmlFor="check">
-        <i className="bi bi-chat-dots comment"></i>
-        {messageReceived && <span className="position-absolute top-0 start-10 translate-middle p-2 bg-danger border border-light rounded-circle"></span>}
-        
-        <i className="bi bi-x-circle close"></i>
+        <i className="bi bi-chat-dots comment" onClick={() => setZindex(2)}></i>
+        {messageReceived && (
+          <span className="position-absolute top-0 start-10 translate-middle p-2 bg-danger border border-light rounded-circle"></span>
+        )}
+
+        <i className="bi bi-x-circle close" onClick={() => setZindex(-2)}></i>
       </label>
-      <div className="chat-wrapper">
+      <div className="chat-wrapper" style={{ zIndex: zIndex }}>
         <div className="chat-header">
           <h6>Let's Chat - Online</h6>
         </div>
         <div className="chat-form">
           <div className="cht-msg">
-              <p>{chatConnectionInfo}</p>
+            <p>{chatConnectionInfo}</p>
             {chat.map((item, id) => (
               <div key={id}>
                 {item.client && (

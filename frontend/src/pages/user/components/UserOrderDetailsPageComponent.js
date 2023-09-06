@@ -77,7 +77,10 @@ const UserOrderDetailsPageComponent = ({
     <Container style={{ padding: "2%", margin: "0" }}>
       <Row>
         <Col md={6}>
-          <Image src={image} style={{ maxWidth: "90%", paddingTop: "2%" }} />
+          <Image
+            src={image}
+            style={{ maxWidth: "90%", paddingTop: "2%", maxHeight: "20rem" }}
+          />
         </Col>
         <Col md={6}>
           <b>Account : </b>
