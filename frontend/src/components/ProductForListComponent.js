@@ -61,7 +61,7 @@ const ProductForListComponent = ({
               {reviewsNumber})
             </Card.Text>
             <Card.Text className="h4">
-              {(price / 9999999).toFixed(4)} ETH{" "}
+              {price / 9999999} ETH{" "}
               <LinkContainer to={`/product-details/${productId}`}>
                 <Button variant="danger">See product</Button>
               </LinkContainer>

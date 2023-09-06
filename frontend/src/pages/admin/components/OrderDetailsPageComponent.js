@@ -111,9 +111,7 @@ const OrderDetailsPageComponent = ({ getOrder, markAsDelivered }) => {
             </ListGroup.Item>
             <ListGroup.Item>
               Items price (after tax):{" "}
-              <span className="fw-bold">
-                {(cartSubtotal / 9999999).toFixed(4)} ETH
-              </span>
+              <span className="fw-bold">{cartSubtotal / 9999999} ETH</span>
             </ListGroup.Item>
             <ListGroup.Item>
               Shipping: <span className="fw-bold">included</span>
@@ -123,9 +121,7 @@ const OrderDetailsPageComponent = ({ getOrder, markAsDelivered }) => {
             </ListGroup.Item>
             <ListGroup.Item className="text-danger">
               Total price:{" "}
-              <span className="fw-bold">
-                {(cartSubtotal / 9999999).toFixed(4)} ETH
-              </span>
+              <span className="fw-bold">{cartSubtotal / 9999999} ETH</span>
             </ListGroup.Item>
             <ListGroup.Item>
               <div className="d-grid gap-2">

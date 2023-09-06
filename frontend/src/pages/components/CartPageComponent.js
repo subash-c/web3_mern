@@ -50,9 +50,7 @@ const CartPageComponent = ({
             </ListGroup.Item>
             <ListGroup.Item>
               Price:{" "}
-              <span className="fw-bold">
-                {(cartSubtotal / 9999999).toFixed(4)} ETH
-              </span>
+              <span className="fw-bold">{cartSubtotal / 9999999} ETH</span>
             </ListGroup.Item>
             <ListGroup.Item>
               <LinkContainer to="/user/cart-details">

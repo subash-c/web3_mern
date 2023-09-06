@@ -5,7 +5,7 @@ const PriceFilterComponent = ({ price, setPrice }) => {
     <>
       <Form.Label>
         <span className="fw-bold">Price no greater than:</span>{" "}
-        {(price / 9999999).toFixed(4)} ETH
+        {price / 9999999} ETH
       </Form.Label>
       <Form.Range
         min={10}

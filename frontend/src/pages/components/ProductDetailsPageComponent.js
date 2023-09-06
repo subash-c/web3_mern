@@ -156,7 +156,7 @@ const ProductDetailsPageComponent = ({
                       <ListGroup.Item>
                         Price{" "}
                         <span className="fw-bold">
-                          {(product.price / 9999999).toFixed(4)} ETH
+                          {product.price / 9999999} ETH
                         </span>
                       </ListGroup.Item>
                       <ListGroup.Item>{product.description}</ListGroup.Item>
@@ -171,7 +171,7 @@ const ProductDetailsPageComponent = ({
                       <ListGroup.Item>
                         Price:{" "}
                         <span className="fw-bold">
-                          {(product.price / 9999999).toFixed(4)} ETH
+                          {product.price / 9999999} ETH
                         </span>
                       </ListGroup.Item>
                       <ListGroup.Item>
