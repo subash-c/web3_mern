@@ -46,7 +46,38 @@
 
 // --- Another Approach --
 
-const NETWORK_ID = 5777;
+// const NETWORK_ID = 5777;
+
+// const loadContract = async (web3) => {
+//   if (!NETWORK_ID) {
+//     return Promise.reject("Network ID is not defined!");
+//   }
+
+//   const res = await fetch(`/contracts/MarketPlace.json`);
+//   console.log("res", res);
+//   const Artifact = await res.json();
+//   console.log("->", Artifact.networks[NETWORK_ID].address);
+//   if (Artifact.networks[NETWORK_ID].address) {
+//     const contract = new web3.eth.Contract(
+//       Artifact.abi,
+//       Artifact.networks[NETWORK_ID].address
+//     );
+//     console.log(contract);
+
+//     return {
+//       contract: contract,
+//       contractAddress: Artifact.networks[NETWORK_ID].address,
+//     };
+//   } else {
+//     return Promise.reject(`Contract: [MarketPlace] cannot be loaded!`);
+//   }
+// };
+
+// export default loadContract;
+
+// from sepolia test network
+
+const NETWORK_ID = process.env.REACT_APP_PUBLIC_NETWORK_ID;
 
 const loadContract = async (web3) => {
   if (!NETWORK_ID) {
@@ -56,17 +87,17 @@ const loadContract = async (web3) => {
   const res = await fetch(`/contracts/MarketPlace.json`);
   console.log("res", res);
   const Artifact = await res.json();
-  console.log("->", Artifact.networks[NETWORK_ID].address);
-  if (Artifact.networks[NETWORK_ID].address) {
+  // console.log("->", Artifact.networks[NETWORK_ID].address);
+  if (Artifact) {
     const contract = new web3.eth.Contract(
       Artifact.abi,
-      Artifact.networks[NETWORK_ID].address
+      process.env.REACT_APP_PUBLIC_CONTRACT_ADDRESS
     );
     console.log(contract);
 
     return {
       contract: contract,
-      contractAddress: Artifact.networks[NETWORK_ID].address,
+      contractAddress: process.env.REACT_APP_PUBLIC_CONTRACT_ADDRESS,
     };
   } else {
     return Promise.reject(`Contract: [MarketPlace] cannot be loaded!`);

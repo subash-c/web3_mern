@@ -9,7 +9,11 @@ const NETWORKS = {
 };
 
 const targetNetwork =
-  NETWORKS[process.env.REACT_APP_PUBLIC_TARGET_CHAIN_ID_DEVELOPMENT];
+  NETWORKS[
+    process.env.REACT_APP_PUBLIC_IS_PRODUCTION
+      ? process.env.REACT_APP_PUBLIC_TARGET_CHAIN_ID_PRODUCTION_TEST
+      : process.env.REACT_APP_PUBLIC_TARGET_CHAIN_ID_DEVELOPMENT
+  ];
 
 export const UseAccount = (web3, provider) => {
   const [account, setAccount] = useState(null);
@@ -20,6 +24,7 @@ export const UseAccount = (web3, provider) => {
   useEffect(() => {
     const getAccount = async () => {
       const accounts = await web3.eth.getAccounts();
+      console.log("Accounts", accounts);
       setAccount(accounts[0]);
       // const bal = await web3.eth.getBalance(accounts[0]);
 
