@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 import CartItemComponent from "../../../components/CartItemComponent";
 import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const UserOrderDetailsPageComponent = ({
   userInfo,
@@ -130,6 +130,15 @@ const UserOrderDetailsPageComponent = ({
         <Col>
           <b>Payment method : </b>
           {paymentMethod}
+        </Col>
+        <Col>
+          <Button
+            variant="outline-secondary"
+            href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
+            target="_blank"
+          >
+            View on ether scan
+          </Button>
         </Col>
       </Row>
     </Container>
