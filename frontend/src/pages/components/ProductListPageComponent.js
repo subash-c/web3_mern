@@ -1,4 +1,11 @@
-import { Row, Col, Container, ListGroup, Button } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Container,
+  ListGroup,
+  Button,
+  Spinner,
+} from "react-bootstrap";
 import PaginationComponent from "../../components/PaginationComponent";
 import ProductForListComponent from "../../components/ProductForListComponent";
 import SortOptionsComponent from "../../components/SortOptionsComponent";
@@ -141,7 +148,20 @@ const ProductListPageComponent = ({ getProducts, categories }) => {
         </Col>
         <Col md={9}>
           {loading ? (
-            <h1>Loading products ....</h1>
+            <h1>
+              <Spinner
+                size="sm"
+                style={{
+                  position: "absolute",
+                  height: "10vh",
+                  width: "10vh",
+                  top: "45vh",
+                  left: "55vw",
+                }}
+                animation="border"
+                variant="secondary"
+              />
+            </h1>
           ) : error ? (
             <h1>Error while loading products. Try again later.</h1>
           ) : (
