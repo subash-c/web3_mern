@@ -26,11 +26,7 @@ export default function Web3Provider({ children }) {
     const loadProvider = async () => {
       const provider = await detectEthereumProvider();
       if (provider) {
-        const web3 = new Web3(
-          provider
-          // "https://mainnet.infura.io/v3/d76f8339ad6444fe8470de7903531c8a"
-        );
-        console.log("_____ghv");
+        const web3 = new Web3(provider);
         const { contract, contractAddress } = await loadContract(web3);
         setWeb3Api({
           provider,
