@@ -28,27 +28,30 @@ const UserOrdersPageComponent = ({ getOrders }) => {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order, idx) => (
-              <tr key={idx}>
-                <td>{idx + 1}</td>
-                <td>You</td>
-                <td>{order.createdAt.substring(0, 10)}</td>
-                <td>{order.transactionHash}</td>
-                <td>
-                  {order.total}{" "}
-                  <img src={"/small-eth.webp"} style={{ width: "30px" }} />
-                </td>
+            {orders
+              .slice()
+              .reverse()
+              .map((order, idx) => (
+                <tr key={idx}>
+                  <td>{idx + 1}</td>
+                  <td>You</td>
+                  <td>{order.createdAt.substring(0, 10)}</td>
+                  <td>{order.transactionHash}</td>
+                  <td>
+                    {order.total}{" "}
+                    <img src={"/small-eth.webp"} style={{ width: "30px" }} />
+                  </td>
 
-                {/* <td>
+                  {/* <td>
                     {order.isDelivered ? <i className="bi bi-check-lg text-success"></i> : <i className="bi bi-x-lg text-danger"></i>}
                   </td> */}
-                <td>
-                  <Link to={`/user/order-details/${order._id}`}>
-                    go to order
-                  </Link>
-                </td>
-              </tr>
-            ))}
+                  <td>
+                    <Link to={`/user/order-details/${order._id}`}>
+                      go to order
+                    </Link>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </Table>
       </Col>
