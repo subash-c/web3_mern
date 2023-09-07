@@ -1,4 +1,5 @@
-Marketplace website with Web3 integrated payment.
+Marketplace website with Web3 integrated payment. Live on https://frontend-n9qv.onrender.com/
+
 
 Things in progess:
 	UI development
