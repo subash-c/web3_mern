@@ -76,7 +76,10 @@ const UserChatComponent = () => {
     <>
       <input type="checkbox" id="check" />
       <label className="chat-btn" htmlFor="check">
-        <i className="bi bi-chat-dots comment" onClick={() => setZindex(2)}></i>
+        <i
+          className="bi bi-chat-dots comment"
+          onClick={() => setZindex(20)}
+        ></i>
         {messageReceived && (
           <span className="position-absolute top-0 start-10 translate-middle p-2 bg-danger border border-light rounded-circle"></span>
         )}
