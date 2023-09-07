@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 import axios from "axios";
-import ReCAPTCHA from "react-hcaptcha";
+// import ReCAPTCHA from "react-hcaptcha";
 
 const RegisterPageComponent = ({
   registerUserApiRequest,
@@ -166,12 +166,15 @@ const RegisterPageComponent = ({
                 <Link to={"/login"}> Login </Link>
               </Col>
             </Row>
-            <ReCAPTCHA
+            {/* <ReCAPTCHA
               sitekey={process.env.REACT_APP_PUBLIC_RECAPTCHA_SITE_KEY}
               onVerify={handleVerify}
-            />
+            /> */}
 
-            <Button type="submit" disabled={buttonDisabled}>
+            <Button
+              type="submit"
+              // disabled={buttonDisabled}
+            >
               {registerUserResponseState &&
               registerUserResponseState.loading === true ? (
                 <Spinner

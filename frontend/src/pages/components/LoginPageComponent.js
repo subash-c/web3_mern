@@ -2,7 +2,7 @@ import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
-import ReCAPTCHA from "react-hcaptcha";
+// import ReCAPTCHA from "react-hcaptcha";
 
 const LoginPageComponent = ({
   loginUserApiRequest,
@@ -101,12 +101,16 @@ const LoginPageComponent = ({
                 <Link to={"/register"}> Register </Link>
               </Col>
             </Row>
-            <ReCAPTCHA
+            {/* <ReCAPTCHA
               sitekey={process.env.REACT_APP_PUBLIC_RECAPTCHA_SITE_KEY}
               onVerify={handleVerify}
-            />
+            /> */}
 
-            <Button variant="primary" type="submit" disabled={buttonDisabled}>
+            <Button
+              variant="primary"
+              type="submit"
+              // disabled={buttonDisabled}
+            >
               {loginUserResponseState &&
               loginUserResponseState.loading === true ? (
                 <Spinner
