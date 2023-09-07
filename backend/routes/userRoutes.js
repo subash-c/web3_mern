@@ -20,7 +20,7 @@ const {
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.post("/email", emailChecker);
+// router.post("/email", emailChecker);
 
 // user logged in routes:
 router.use(verifyIsLoggedIn);
