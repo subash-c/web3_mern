@@ -103,7 +103,6 @@ const UserCartDetailsPageComponent = ({
     };
     createOrder(orderData)
       .then((data) => {
-        console.log("data=", data);
         if (data) {
           // navigate("/user/order-details/" + data._id);
         }
@@ -243,7 +242,6 @@ const UserCartDetailsPageComponent = ({
             </h2>
           </Row>
           <Row>
-            {console.log(status)}
             <ListGroup variant="flush">
               {cartItems.length
                 ? cartItems.map((item, idx) => (

@@ -94,7 +94,6 @@ const HeaderComponent = () => {
         }
       );
       socket.on("disconnected", ({ reason, socketId }) => {
-        //   console.log(socketId, reason)
         dispatch(removeChatRoom(socketId));
       });
       return () => socket.disconnect();
@@ -122,7 +121,6 @@ const HeaderComponent = () => {
   const { connect, isLoading, isWeb3Loaded, useAccount, web3, provider } =
     useWeb3();
   const { account } = useAccount(web3, provider);
-  // console.log(web3);
 
   return (
     <Container fluid className="paddingColor">

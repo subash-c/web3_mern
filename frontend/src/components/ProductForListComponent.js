@@ -16,7 +16,6 @@ const ProductForListComponent = ({
   const getLowSize = (s) => {
     return s.substring(0, 200) + "...";
   };
-  console.log(images);
   return (
     <Card style={{ marginTop: "30px", marginBottom: "50px" }}>
       <Row>
@@ -50,7 +49,6 @@ const ProductForListComponent = ({
                 : "https://raw.githubusercontent.com/subash-c/productImages/main/0000000000000-deziworkz-1100x1100-imaedz2krgqc4pxx.jpeg"
             }
           />
-          {/* {console.log(images)} */}
         </Col>
         <Col lg={7}>
           <Card.Body>

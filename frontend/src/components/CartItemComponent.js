@@ -27,8 +27,6 @@ const CartItemComponent = ({
   const [statusChange, setStatusChange] = useState(status);
   const [count, setCount] = useState(item.quantity);
   const [mul, setMul] = useState(item.quantity);
-  console.log("PPPP", item);
-  console.log(status);
   const orderHandler = () => {
     const orderData = {
       cartItem: {
@@ -45,11 +43,9 @@ const CartItemComponent = ({
     setStatusChange("Loading...");
     createOrder(orderData)
       .then((data) => {
-        console.log("data=", data);
         if (data) {
           // navigate("/user/order-details/" + data._id);
           setStatusChange("Placed 🙂");
-          console.log("===>", data);
           setTimeout(() => {
             reduxDispatch(
               removeFromCart(item.productID, item.quantity, item.price)
@@ -100,7 +96,6 @@ const CartItemComponent = ({
               <Col md={2} md="auto">
                 <Button variant="outline-dark" disabled={true}>
                   {count}
-                  {console.log(count)}
                 </Button>
               </Col>
               <Col md={5} md="auto">
@@ -159,7 +154,6 @@ const CartItemComponent = ({
                     network
                   }
                 >
-                  {/* {console.log("CTYFY", network)} */}
                   {metamaskConnect
                     ? "Connect metamask"
                     : network

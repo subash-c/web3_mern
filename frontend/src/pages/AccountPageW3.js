@@ -31,8 +31,6 @@ const AccountPageW3 = () => {
     provider
   );
 
-  // console.log("s=", currentPrice);
-  // const
   let currentPrice = EthPrice();
 
   const [currency, setCurrency] = useState(["Loading...", "Loading..."]);
@@ -102,7 +100,6 @@ const AccountPageW3 = () => {
               <Col md={4}>
                 <span>
                   <Form.Select onChange={chooseCurrency}>
-                    {console.log(currency)}
                     {currentPrice && currentPrice.market_data ? (
                       Object.keys(currentPrice.market_data.current_price).map(
                         (val, idx) => (

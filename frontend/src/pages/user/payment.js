@@ -23,8 +23,6 @@ const paymentEth = async (
     from: account,
     value: value,
   };
-  console.log("m", contract.methods);
-  console.log("eve", contract.events);
 
   const sendPayment = async () => {
     try {

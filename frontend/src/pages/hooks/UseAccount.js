@@ -24,27 +24,12 @@ export const UseAccount = (web3, provider) => {
   useEffect(() => {
     const getAccount = async () => {
       const accounts = await web3.eth.getAccounts();
-      console.log("Accounts", accounts);
       setAccount(accounts[0]);
-      // const bal = await web3.eth.getBalance(accounts[0]);
-
-      // setBalance(web3.utils.fromWei(bal, "ether"));
-
-      // console.log(bal, balance);
     };
 
     const getChainId = async () => {
       const chainId = await web3.eth.getChainId();
       setNetwork(() => NETWORKS[parseInt(chainId)]);
-      // console.log(
-      //   "HB",
-      //   chainId,
-      //   network,
-      //   NETWORKS[parseInt(chainId)],
-      //   targetNetwork,
-      //   process.env.REACT_APP_PUBLIC_TARGET_CHAIN_ID_DEVELOPMENT,
-      //   targetNetwork === network
-      // );
     };
 
     web3 && getAccount() && getChainId();

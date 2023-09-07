@@ -32,10 +32,8 @@ const UserCartDetailsPage = () => {
   };
 
   const createOrder = async (orderData) => {
-    console.log("user", userInfo);
     // return;
     const { cartItem } = orderData;
-    console.log("c", cartItem);
     const resultOrder = await paymentEth(
       cartItem,
       userInfo,
@@ -44,11 +42,9 @@ const UserCartDetailsPage = () => {
       contract,
       contractAddress
     );
-    // console.log("res", resultOrder);
     const sendTransaction = await resultOrder.sendPayment();
 
     if (sendTransaction.status) {
-      console.log("see", sendTransaction);
       const transactionHash = sendTransaction.transactionHash;
       try {
         const { data } = await axios.post("/api/orders", {
@@ -59,7 +55,6 @@ const UserCartDetailsPage = () => {
           account,
           userInfo,
         });
-        console.log("dataa", data);
         return data;
       } catch (e) {
         console.log("er", e);

@@ -101,7 +101,6 @@ const ProductDetailsPageComponent = ({
         );
     }
   };
-  console.log(product.images);
   return (
     <>
       <MetaComponent title={product.name} description={product.description} />

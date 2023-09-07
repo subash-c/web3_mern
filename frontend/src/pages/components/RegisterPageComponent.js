@@ -68,18 +68,10 @@ const RegisterPageComponent = ({
     setValidated(true);
   };
 
-  const emailCheck = async () => {
-    const data = "subashchinn@gmail.com";
-    console.log(data);
-    await axios.post("/api/users/email", { data });
-    console.log("676");
-  };
-
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
   // Callback function to handle captcha verification
   const handleVerify = (token) => {
-    // console.log("Captcha verified:", token);
     // setCaptchaToken(token);
     setButtonDisabled(false);
   };

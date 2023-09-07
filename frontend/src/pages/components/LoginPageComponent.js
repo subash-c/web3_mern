@@ -40,7 +40,6 @@ const LoginPageComponent = ({
 
           if (res.userLoggedIn) {
             reduxDispatch(setReduxUserState(res.userLoggedIn));
-            // console.log("OOOO")
           }
 
           if (res.success === "user logged in" && !res.userLoggedIn.isAdmin)
@@ -59,7 +58,6 @@ const LoginPageComponent = ({
     setValidated(true);
   };
   const handleVerify = (token) => {
-    // console.log("Captcha verified:", token);
     // setCaptchaToken(token);
     setButtonDisabled(false);
   };

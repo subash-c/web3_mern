@@ -85,7 +85,6 @@ const loadContract = async (web3) => {
   }
 
   const res = await fetch(`/contracts/MarketPlace.json`);
-  console.log("res", res);
   const Artifact = await res.json();
   // console.log("->", Artifact.networks[NETWORK_ID].address);
   if (Artifact) {
@@ -93,7 +92,6 @@ const loadContract = async (web3) => {
       Artifact.abi,
       process.env.REACT_APP_PUBLIC_CONTRACT_ADDRESS
     );
-    console.log(contract);
 
     return {
       contract: contract,

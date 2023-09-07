@@ -50,13 +50,11 @@ const UserOrderDetailsPageComponent = ({
   useEffect(() => {
     getOrder(id)
       .then((data) => {
-        console.log("DD", data);
         setCount(data.count);
         setName(data.name);
         setPaymentMethod(data.paymentMethod);
         setTransactionHash(data.transactionHash);
         setImage(data.image.path);
-        // console.log("img", image);
         setUserAddress(data.account);
         setPrice(data.price);
         setQuantity(data.quantity);

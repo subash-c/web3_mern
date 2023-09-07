@@ -2,21 +2,17 @@ const withdrawETH = async (web3, contract, account, item) => {
   const amount = await web3.utils.toWei(String(1), "ether");
 
   const gasPrice = await web3.eth.getGasPrice();
-  console.log("Ac1", account);
   //   const gasEstimate = await contract.methods
   //     .withdrawFunds(amount)
   //     .estimateGas();
 
   // Use Ethereum provider (e.g., MetaMask) to sign and send the transaction
-  console.log("Ac2", account);
   const transaction = await contract.methods.withdrawFunds(amount).call; //.send({
   //  from: account,//
   // gas: gasEstimate,
   // gasPrice: gasPrice,
   // value: amount,
   //});
-  console.log("txs", transaction);
-  console.log("VFYJU", contract.methods);
 
   //   const txObject = {
   //     from: account,

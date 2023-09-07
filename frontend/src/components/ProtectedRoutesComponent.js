@@ -40,7 +40,6 @@ const ProtectedRoutesComponent = ({ admin }) => {
       }
     };
   }, [isAuth]);
-  //   console.log("---->", isAuth);
 
   if (isAuth === undefined) {
     return <LoginPage />;

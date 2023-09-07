@@ -45,12 +45,7 @@ const OrderDetailsPageComponent = ({ getOrder, markAsDelivered }) => {
         }
         setCartItems(order.cartItems);
       })
-      .catch(
-        (er) => dispatch(logout())
-        // console.log(
-        //   er.response.data.message ? er.response.data.message : er.response.data
-        // )
-      );
+      .catch((er) => dispatch(logout()));
   }, [isDelivered, id]);
   return (
     <Container fluid>
