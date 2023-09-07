@@ -16,7 +16,7 @@ const {
   deleteUser,
 } = require("../controllers/userController");
 
-const { emailChecker } = require("../controllers/emailChecker");
+// const { emailChecker } = require("../controllers/emailChecker");
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
