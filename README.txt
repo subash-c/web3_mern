@@ -1,7 +1,7 @@
-Marketplace website with Web3 integrated payment. (Old file -> Live on https://frontend-n9qv.onrender.com/   Loading data will take time)
+Marketplace website with Web3 integrated payment. (Archive -> https://frontend-n9qv.onrender.com/   Loading data may take time)
 
 
-Things in progess:
+Development has been migrated to gitlab repo (:
 	UI development
 	Complete integration of web3
 	Extra functionalities
